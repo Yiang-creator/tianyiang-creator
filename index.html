@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>甜一昂 · Creator Camp</title>
+  <style>
+    :root {
+      --bg: #080914;
+      --panel: rgba(18, 20, 36, 0.74);
+      --panel-strong: rgba(24, 27, 47, 0.92);
+      --line: rgba(255,255,255,0.08);
+      --gold: #f6d79d;
+      --rose: #f0a8c6;
+      --pink: #ffbfd4;
+      --text: #f6f1ff;
+      --muted: #c4bdd9;
+      --soft: #9f96bd;
+      --mint: #9fe7cf;
+      --violet: #9f8cff;
+      --danger: #ff8ab1;
+      --shadow: 0 18px 60px rgba(0, 0, 0, 0.42);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(175, 141, 255, 0.18), transparent 26%),
+        radial-gradient(circle at top right, rgba(255, 182, 210, 0.14), transparent 28%),
+        linear-gradient(180deg, #080914 0%, #0a1021 45%, #070a14 100%);
+      min-height: 100vh;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,.7), transparent),
+        radial-gradient(1.5px 1.5px at 80% 12%, rgba(255,255,255,.55), transparent),
+        radial-gradient(1.5px 1.5px at 66% 72%, rgba(255,255,255,.42), transparent),
+        radial-gradient(2px 2px at 34% 84%, rgba(255,255,255,.52), transparent),
+        radial-gradient(1.5px 1.5px at 10% 70%, rgba(255,255,255,.38), transparent);
+      opacity: .75;
+    }
+    .app {
+      width: min(1180px, calc(100vw - 28px));
+      margin: 28px auto 54px;
+      position: relative;
+      z-index: 1;
+    }
+    .hero, .card, .panel, .task-card, .metric-card, .mini-card, .week-day {
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+    .hero {
+      border-radius: 28px;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+      background:
+        linear-gradient(145deg, rgba(19,22,43,.95), rgba(24,22,49,.84)),
+        var(--panel);
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -60px;
+      top: -60px;
+      width: 220px;
+      height: 220px;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(255, 212, 154, .24), transparent 68%);
+      pointer-events: none;
+    }
+    .hero-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+      align-items: flex-start;
+    }
+    .tag {
+      display: inline-flex;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(246, 215, 157, .3);
+      color: var(--gold);
+      letter-spacing: .18em;
+      font-size: 12px;
+      text-transform: uppercase;
+      background: rgba(255,255,255,.04);
+    }
+    h1,h2,h3,p { margin: 0; }
+    .hero h1 { font-size: clamp(28px, 4vw, 42px); margin-top: 12px; }
+    .subtitle { color: var(--muted); margin-top: 10px; line-height: 1.7; max-width: 720px; }
+    .hero-side {
+      min-width: 250px;
+      padding: 18px;
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
+      border: 1px solid rgba(255,255,255,.08);
+    }
+    .hero-side .big { font-size: 30px; font-weight: 800; color: var(--gold); margin-top: 6px; }
+    .hero-side .small { color: var(--muted); font-size: 13px; margin-top: 6px; line-height: 1.6; }
+    .tabs {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .tab-btn {
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.04);
+      color: var(--muted);
+      border-radius: 18px;
+      padding: 14px 16px;
+      text-align: left;
+      cursor: pointer;
+      transition: .22s ease;
+    }
+    .tab-btn strong { display: block; color: var(--text); margin-bottom: 4px; font-size: 15px; }
+    .tab-btn.active {
+      background: linear-gradient(135deg, rgba(247, 215, 157, .18), rgba(238, 168, 198, .16));
+      border-color: rgba(246,215,157,.25);
+      transform: translateY(-1px);
+    }
+    .tab-btn:hover { transform: translateY(-1px); }
+    .tab-btn span { font-size: 12px; line-height: 1.5; display: block; }
+    .tab-panel { display: none; margin-top: 20px; }
+    .tab-panel.active { display: block; }
+    .grid-2, .grid-3, .grid-4 { display: grid; gap: 16px; }
+    .grid-2 { grid-template-columns: 1.15fr .85fr; }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .card, .panel { border-radius: 24px; padding: 20px; }
+    .section-title { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 16px; }
+    .section-title h2 { font-size: 20px; }
+    .section-desc { color: var(--muted); font-size: 13px; line-height: 1.6; }
+    .attr-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .attr {
+      padding: 16px;
+      border-radius: 20px;
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.025));
+      border: 1px solid rgba(255,255,255,.06);
+    }
+    .attr-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+    .attr-name { font-size: 13px; color: var(--muted); }
+    .attr-value { font-size: 28px; font-weight: 800; }
+    .progress {
+      margin-top: 12px;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      overflow: hidden;
+    }
+    .progress > i {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--gold), var(--rose));
+      box-shadow: 0 0 18px rgba(240,168,198,.35);
+    }
+    .hint { color: var(--soft); font-size: 12px; margin-top: 8px; line-height: 1.6; }
+    .pill-row, .list-row { display: flex; flex-wrap: wrap; gap: 10px; }
+    .pill {
+      padding: 9px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.07);
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .week-board { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 10px; }
+    .week-day {
+      border-radius: 18px;
+      padding: 14px 10px;
+      text-align: center;
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.025));
+    }
+    .week-day.active { border-color: rgba(159,231,207,.42); box-shadow: 0 10px 24px rgba(159,231,207,.1); }
+    .week-day .date { color: var(--soft); font-size: 11px; margin-top: 6px; }
+    .week-day .dot {
+      width: 12px; height: 12px; border-radius: 50%; margin: 10px auto 0;
+      background: rgba(255,255,255,.14);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.1);
+    }
+    .week-day.active .dot { background: linear-gradient(135deg, var(--mint), var(--gold)); box-shadow: 0 0 18px rgba(159,231,207,.3); }
+    .reward-list { margin-top: 14px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+    .mini-card {
+      border-radius: 18px; padding: 14px; background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+    }
+    .mini-card.done { border-color: rgba(246,215,157,.3); }
+    .task-stage-wrap { display: grid; gap: 14px; }
+    .task-card {
+      border-radius: 22px; padding: 18px; background: linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.02));
+    }
+    .task-card.locked { opacity: .78; border-style: dashed; }
+    .task-header { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
+    .task-header .meta { color: var(--muted); font-size: 12px; margin-top: 6px; }
+    .badge {
+      white-space: nowrap; padding: 8px 12px; border-radius: 999px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.08); color: var(--gold); font-size: 12px;
+    }
+    .task-list { margin-top: 14px; display: grid; gap: 10px; }
+    .task-item {
+      display: grid; grid-template-columns: 22px 1fr auto; gap: 12px; align-items: flex-start;
+      border-radius: 18px; padding: 14px; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.06);
+    }
+    .task-item input { margin-top: 4px; accent-color: #ffbfd4; width: 18px; height: 18px; }
+    .task-item strong { display:block; font-size: 15px; }
+    .task-item span { display:block; margin-top: 5px; color: var(--muted); font-size: 12px; line-height: 1.6; }
+    .task-reward { color: var(--gold); font-size: 12px; }
+    .task-item.done { border-color: rgba(159,231,207,.25); background: linear-gradient(135deg, rgba(159,231,207,.08), rgba(255,255,255,.03)); }
+    .form { display: grid; gap: 12px; }
+    .row-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    input, textarea, select {
+      width: 100%; border: 1px solid rgba(255,255,255,.09); background: rgba(9, 11, 23, .62); color: var(--text);
+      border-radius: 16px; padding: 12px 14px; font: inherit; outline: none;
+    }
+    input::placeholder, textarea::placeholder { color: #9087ad; }
+    textarea { min-height: 96px; resize: vertical; }
+    .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    button.action {
+      border: none; cursor: pointer; color: #0f1124; font-weight: 700; border-radius: 16px; padding: 12px 16px;
+      background: linear-gradient(135deg, var(--gold), var(--rose));
+    }
+    button.ghost {
+      border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.04); color: var(--text); border-radius: 16px; padding: 12px 16px; cursor: pointer;
+    }
+    .entry-list { display: grid; gap: 12px; margin-top: 16px; }
+    .entry {
+      padding: 14px; border-radius: 18px; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.06);
+    }
+    .entry .top { display:flex; justify-content:space-between; gap:10px; }
+    .entry .top strong { font-size: 15px; }
+    .entry .type { color: var(--gold); font-size: 12px; }
+    .entry p { margin-top: 8px; color: var(--muted); line-height: 1.7; font-size: 13px; white-space: pre-wrap; }
+    .empty { padding: 22px; border-radius: 18px; border: 1px dashed rgba(255,255,255,.1); color: var(--soft); text-align: center; }
+    .metric-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12px; }
+    .metric-card { border-radius: 18px; padding: 16px; background: linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.02)); }
+    .metric-card .label { color: var(--muted); font-size: 12px; }
+    .metric-card .num { font-size: 26px; font-weight: 800; margin-top: 8px; }
+    .metric-card .sub { color: var(--soft); font-size: 12px; margin-top: 6px; }
+    .chart-box { height: 240px; display: flex; align-items: flex-end; gap: 10px; margin-top: 14px; }
+    .bar { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .bar i { width: 100%; border-radius: 14px 14px 6px 6px; background: linear-gradient(180deg, rgba(246,215,157,.95), rgba(240,168,198,.72)); box-shadow: 0 10px 24px rgba(240,168,198,.18); }
+    .bar span { font-size: 12px; color: var(--muted); }
+    .footer-note { color: var(--soft); font-size: 12px; line-height: 1.7; margin-top: 14px; }
+    .accent { color: var(--gold); }
+    @media (max-width: 980px) {
+      .tabs, .grid-4, .metric-grid, .reward-list, .grid-3, .grid-2, .row-2 { grid-template-columns: 1fr; }
+      .week-board { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .task-item { grid-template-columns: 22px 1fr; }
+      .task-reward { grid-column: 2 / 3; }
+    }
+    @media (max-width: 640px) {
+      .app { width: min(100vw - 18px, 100%); margin: 12px auto 32px; }
+      .hero, .card, .panel { padding: 16px; border-radius: 22px; }
+      .hero-side { width: 100%; }
+      .week-board { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .attr-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app" id="app"></div>
+  <script>
+    const STORAGE_KEY = 'creator-camp-ultimate-v1';
+    const DAY_MS = 24 * 60 * 60 * 1000;
+    const TODAY = new Date('2026-05-25T16:28:00+08:00');
+    const weekLabels = ['周一','周二','周三','周四','周五','周六','周日'];
+
+    const stageSeeds = [
+      {
+        key: 'stage1',
+        title: '启程建档',
+        icon: '🌒',
+        summary: '先把创作系统搭起来，让副业不再靠临时起意。',
+        tasks: [
+          { id: 's1-1', text: '整理 10 条个人观点选题，形成第一版弹药库', reward: '创造力 +8 / 触发周记录', type: 'creative' },
+          { id: 's1-2', text: '录下第一条 30 秒口播并完成发布文案', reward: '影响力 +6 / 气场 +4', type: 'creative' },
+          { id: 's1-3', text: '梳理求职辅导产品页：服务项、价格、交付物', reward: '变现力 +9', type: 'system' }
+        ]
+      },
+      {
+        key: 'stage2',
+        title: '稳定输出',
+        icon: '✨',
+        summary: '开始形成固定更新和转化路径。',
+        tasks: [
+          { id: 's2-1', text: '一周内完成 3 次创作动作并写 1 条复盘', reward: '创造力 +10 / 气场 +3', type: 'creative' },
+          { id: 's2-2', text: '完成第一位咨询用户的线索承接流程', reward: '变现力 +12 / 影响力 +4', type: 'system' },
+          { id: 's2-3', text: '发布 1 条明确表达个人判断的观点内容', reward: '影响力 +8 / 气场 +5', type: 'creative' }
+        ]
+      },
+      {
+        key: 'stage3',
+        title: '放大破圈',
+        icon: '🌟',
+        summary: '用更成熟的内容和产品心智，去拿结果。',
+        tasks: [
+          { id: 's3-1', text: '单周新增 5 条高质量灵感素材并完成分类', reward: '创造力 +12', type: 'creative' },
+          { id: 's3-2', text: '记录首个可复用的成交案例模板', reward: '变现力 +15 / 气场 +4', type: 'system' },
+          { id: 's3-3', text: '让内容数据出现一次明显上扬（如点赞/收藏新高）', reward: '影响力 +12 / 气场 +6', type: 'creative' }
+        ]
+      },
+      {
+        key: 'stage4',
+        title: '个人IP成型',
+        icon: '👑',
+        summary: '最终目标是让表达、成交、影响力都形成稳定闭环。',
+        tasks: [
+          { id: 's4-1', text: '月度内容矩阵稳定运行：观点输出 + 求职转化双线推进', reward: '全属性提升', type: 'system' },
+          { id: 's4-2', text: '副业收入进入可持续区间', reward: '变现力 +20 / 气场 +8', type: 'system' },
+          { id: 's4-3', text: '形成一套属于自己的创作方法论页面', reward: '影响力 +15 / 创造力 +15', type: 'creative' }
+        ]
+      }
+    ];
+
+    const defaultState = {
+      activeTab: 'overview',
+      tasks: stageSeeds.map((stage, stageIndex) => ({
+        ...stage,
+        unlocked: stageIndex === 0,
+        tasks: stage.tasks.map(task => ({ ...task, checked: false, checkedAt: '' }))
+      })),
+      attributes: {
+        creativity: 35,
+        influence: 8,
+        monetization: 22,
+        auraBase: 58
+      },
+      ideas: [
+        { id: 'idea-seed-1', title: '为什么很多校招生明明努力，却总在表达上吃亏', body: '拆真实工作场景：不是不会做，是不会把价值讲给别人听。', createdAt: TODAY.toISOString(), type: '观点素材' },
+        { id: 'idea-seed-2', title: '留学一年最值得说的不是见识，而是认知回流', body: '从“看起来厉害”转到“真正能为现在的自己带来什么”。', createdAt: TODAY.toISOString(), type: '留学内容' }
+      ],
+      diary: [
+        { id: 'diary-seed-1', title: '今日复盘', body: '真正要做的不是把每件事都做满，而是先把能形成飞轮的动作做出来。', createdAt: TODAY.toISOString(), mood: '稳住' }
+      ],
+      metrics: {
+        followers: 286,
+        likes: 1240,
+        saves: 311,
+        revenue: 1680,
+        weeklyContent: [1, 0, 2, 1, 3, 2, 1]
+      },
+      weekly: {
+        weekStart: getWeekStart(TODAY).toISOString(),
+        activeDays: [0],
+        actions: [
+          { at: TODAY.toISOString(), source: 'seed', label: '初始化创作者营地' }
+        ],
+        rewardsClaimed: []
+      },
+      lastCreativeAt: TODAY.toISOString()
+    };
+
+    function getWeekStart(date) {
+      const d = new Date(date);
+      const day = d.getDay();
+      const diff = day === 0 ? -6 : 1 - day;
+      d.setHours(0,0,0,0);
+      d.setDate(d.getDate() + diff);
+      return d;
+    }
+    function sameDate(a, b) {
+      return new Date(a).toDateString() === new Date(b).toDateString();
+    }
+    function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+    function uid(prefix) { return prefix + '-' + Math.random().toString(36).slice(2, 9); }
+    function formatDate(value) {
+      const d = new Date(value);
+      return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
+    }
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return structuredClone(defaultState);
+        const parsed = JSON.parse(raw);
+        return migrate(parsed);
+      } catch (e) {
+        return structuredClone(defaultState);
+      }
+    }
+    function migrate(parsed) {
+      const state = structuredClone(defaultState);
+      Object.assign(state, parsed || {});
+      state.attributes = Object.assign({}, defaultState.attributes, parsed.attributes || {});
+      state.metrics = Object.assign({}, defaultState.metrics, parsed.metrics || {});
+      state.weekly = Object.assign({}, defaultState.weekly, parsed.weekly || {});
+      if (!Array.isArray(state.weekly.activeDays)) state.weekly.activeDays = [];
+      if (!Array.isArray(state.weekly.actions)) state.weekly.actions = [];
+      if (!Array.isArray(state.weekly.rewardsClaimed)) state.weekly.rewardsClaimed = [];
+      if (!Array.isArray(state.ideas)) state.ideas = [];
+      if (!Array.isArray(state.diary)) state.diary = [];
+      if (!Array.isArray(state.tasks)) state.tasks = structuredClone(defaultState.tasks);
+      resetWeekIfNeeded(state);
+      return state;
+    }
+    function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+    function resetWeekIfNeeded(stateObj) {
+      const currentWeekStart = getWeekStart(TODAY).toISOString();
+      if (stateObj.weekly.weekStart !== currentWeekStart) {
+        stateObj.weekly.weekStart = currentWeekStart;
+        stateObj.weekly.activeDays = [];
+        stateObj.weekly.actions = [];
+        stateObj.weekly.rewardsClaimed = [];
+      }
+    }
+    function applyWeeklyRewards(stateObj) {
+      const days = stateObj.weekly.activeDays.length;
+      const rewardMap = {
+        3: { creativity: 4, influence: 2 },
+        5: { monetization: 5, influence: 3 },
+        7: { creativity: 6, monetization: 6, influence: 4 }
+      };
+      [3,5,7].forEach(step => {
+        if (days >= step && !stateObj.weekly.rewardsClaimed.includes(step)) {
+          const reward = rewardMap[step];
+          stateObj.attributes.creativity += reward.creativity || 0;
+          stateObj.attributes.influence += reward.influence || 0;
+          stateObj.attributes.monetization += reward.monetization || 0;
+          stateObj.weekly.rewardsClaimed.push(step);
+        }
+      });
+    }
+    function touchCreativeAction(source, label) {
+      resetWeekIfNeeded(state);
+      const weekStart = new Date(state.weekly.weekStart);
+      const diff = Math.floor((new Date(TODAY).setHours(0,0,0,0) - weekStart.getTime()) / DAY_MS);
+      const dayIndex = clamp(diff, 0, 6);
+      if (!state.weekly.activeDays.includes(dayIndex)) state.weekly.activeDays.push(dayIndex);
+      state.weekly.actions.unshift({ at: TODAY.toISOString(), source, label });
+      state.weekly.actions = state.weekly.actions.slice(0, 20);
+      state.lastCreativeAt = TODAY.toISOString();
+      applyWeeklyRewards(state);
+    }
+    function completedTaskCount() {
+      return state.tasks.reduce((sum, stage) => sum + stage.tasks.filter(t => t.checked).length, 0);
+    }
+    function totalTaskCount() {
+      return state.tasks.reduce((sum, stage) => sum + stage.tasks.length, 0);
+    }
+    function unlockedStages(stages) {
+      const derived = structuredClone(stages);
+      for (let i = 0; i < derived.length; i++) {
+        derived[i].unlocked = i === 0 ? true : derived[i - 1].tasks.every(t => t.checked);
+      }
+      return derived;
+    }
+    function getVisibleStages(stages) {
+      const derived = unlockedStages(stages);
+      const firstLockedIndex = derived.findIndex(stage => !stage.unlocked);
+      if (firstLockedIndex === -1) return derived;
+      return derived.filter((stage, index) => stage.unlocked || index === firstLockedIndex);
+    }
+    function computeAura() {
+      const base = state.attributes.auraBase;
+      const creativeActions = state.weekly.actions.length;
+      const diaryCount = state.diary.length;
+      const ideaCount = state.ideas.length;
+      const done = completedTaskCount();
+      return Math.round(base + state.weekly.activeDays.length * 3 + creativeActions * 1.2 + diaryCount * 1.5 + ideaCount * 0.8 + done * 2);
+    }
+    function stageProgress(stage) {
+      const done = stage.tasks.filter(t => t.checked).length;
+      return Math.round(done / stage.tasks.length * 100);
+    }
+    function currentStage(stages) {
+      const derived = unlockedStages(stages);
+      return derived.find(stage => stage.unlocked && stage.tasks.some(t => !t.checked)) || derived[derived.length - 1];
+    }
+    function setTab(tab) { state.activeTab = tab; commit(); }
+    function commit() { saveState(); render(); }
+    function resetAll() {
+      localStorage.removeItem(STORAGE_KEY);
+      state = structuredClone(defaultState);
+      commit();
+    }
+
+    let state = loadState();
+
+    function handleTaskToggle(stageKey, taskId) {
+      const derived = unlockedStages(state.tasks);
+      const stageIndex = derived.findIndex(s => s.key === stageKey);
+      if (stageIndex === -1 || !derived[stageIndex].unlocked) return;
+      const stage = state.tasks[stageIndex];
+      const task = stage.tasks.find(t => t.id === taskId);
+      task.checked = !task.checked;
+      task.checkedAt = task.checked ? TODAY.toISOString() : '';
+      if (task.checked) {
+        if (task.reward.includes('创造力')) state.attributes.creativity += Number(task.reward.match(/创造力 \+(\d+)/)?.[1] || 0);
+        if (task.reward.includes('影响力')) state.attributes.influence += Number(task.reward.match(/影响力 \+(\d+)/)?.[1] || 0);
+        if (task.reward.includes('变现力')) state.attributes.monetization += Number(task.reward.match(/变现力 \+(\d+)/)?.[1] || 0);
+        if (task.reward.includes('全属性提升')) {
+          state.attributes.creativity += 10; state.attributes.influence += 10; state.attributes.monetization += 10;
+        }
+        if (task.type === 'creative') touchCreativeAction('task', `完成任务：${task.text}`);
+      }
+      commit();
+    }
+    function addIdea(form) {
+      const title = form.querySelector('[name="ideaTitle"]').value.trim();
+      const body = form.querySelector('[name="ideaBody"]').value.trim();
+      const type = form.querySelector('[name="ideaType"]').value;
+      if (!title || !body) return;
+      state.ideas.unshift({ id: uid('idea'), title, body, type, createdAt: TODAY.toISOString() });
+      state.attributes.creativity += 3;
+      touchCreativeAction('idea', `保存灵感：${title}`);
+      form.reset();
+      commit();
+    }
+    function addDiary(form) {
+      const title = form.querySelector('[name="diaryTitle"]').value.trim();
+      const body = form.querySelector('[name="diaryBody"]').value.trim();
+      const mood = form.querySelector('[name="diaryMood"]').value;
+      if (!title || !body) return;
+      state.diary.unshift({ id: uid('diary'), title, body, mood, createdAt: TODAY.toISOString() });
+      state.attributes.influence += 2;
+      touchCreativeAction('diary', `写下心得：${title}`);
+      form.reset();
+      commit();
+    }
+    function updateMetrics(form) {
+      const followers = Number(form.querySelector('[name="followers"]').value || state.metrics.followers);
+      const likes = Number(form.querySelector('[name="likes"]').value || state.metrics.likes);
+      const saves = Number(form.querySelector('[name="saves"]').value || state.metrics.saves);
+      const revenue = Number(form.querySelector('[name="revenue"]').value || state.metrics.revenue);
+      state.metrics.followers = followers;
+      state.metrics.likes = likes;
+      state.metrics.saves = saves;
+      state.metrics.revenue = revenue;
+      state.attributes.monetization = Math.max(state.attributes.monetization, 22 + Math.floor(revenue / 300));
+      state.attributes.influence = Math.max(state.attributes.influence, 8 + Math.floor((followers + likes) / 180));
+      touchCreativeAction('data', '更新数据看板');
+      commit();
+    }
+    function overviewHTML() {
+      const aura = computeAura();
+      const current = currentStage(state.tasks);
+      const weekStart = new Date(state.weekly.weekStart);
+      const weekDays = Array.from({ length: 7 }, (_, index) => {
+        const d = new Date(weekStart.getTime() + index * DAY_MS);
+        const active = state.weekly.activeDays.includes(index);
+        return `<div class="week-day ${active ? 'active' : ''}"><strong>${weekLabels[index]}</strong><div class="date">${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}</div><div class="dot"></div></div>`;
+      }).join('');
+      const rewardDone = step => state.weekly.rewardsClaimed.includes(step) ? 'done' : '';
+      const auraPercent = clamp(aura % 100, 8, 100);
+      return `
+        <div class="grid-2">
+          <section class="card">
+            <div class="section-title"><div><h2>角色属性总览</h2><div class="section-desc">初始值已按你的最新要求重置：创造力 35 / 影响力 8 / 变现力 22 / 气场 58。现在的<span class="accent">气场</span>改为由持续创作、任务推进与复盘沉淀共同抬升。</div></div></div>
+            <div class="attr-grid">
+              <div class="attr"><div class="attr-head"><div><div class="attr-name">创造力</div><div class="attr-value">${state.attributes.creativity}</div></div><span>✦</span></div><div class="progress"><i style="width:${clamp(state.attributes.creativity,0,100)}%"></i></div><div class="hint">每次保存灵感、完成创作任务、周记录达标都会增长。</div></div>
+              <div class="attr"><div class="attr-head"><div><div class="attr-name">影响力</div><div class="attr-value">${state.attributes.influence}</div></div><span>✦</span></div><div class="progress"><i style="width:${clamp(state.attributes.influence,0,100)}%"></i></div><div class="hint">来自观点表达、数据抬升和可被感知的个人判断。</div></div>
+              <div class="attr"><div class="attr-head"><div><div class="attr-name">变现力</div><div class="attr-value">${state.attributes.monetization}</div></div><span>✦</span></div><div class="progress"><i style="width:${clamp(state.attributes.monetization,0,100)}%"></i></div><div class="hint">产品页、咨询承接、收入记录都会拉高这项数值。</div></div>
+              <div class="attr"><div class="attr-head"><div><div class="attr-name">气场</div><div class="attr-value">${aura}</div></div><span>👑</span></div><div class="progress"><i style="width:${auraPercent}%"></i></div><div class="hint">气场 = 58 基础值 + 本周活跃天数 + 创作动作数 + 心得沉淀 + 阶段完成度，不再靠单一打卡硬堆。</div></div>
+            </div>
+            <div class="pill-row" style="margin-top:16px;">
+              <div class="pill">当前主线：${current.icon} ${current.title}</div>
+              <div class="pill">已完成任务：${completedTaskCount()} / ${totalTaskCount()}</div>
+              <div class="pill">本周创作活跃：${state.weekly.activeDays.length} / 7 天</div>
+            </div>
+          </section>
+          <section class="panel">
+            <div class="section-title"><div><h2>本周创作记录</h2><div class="section-desc">现在按周统计，<span class="accent">每周一自动重置</span>。今天是 2026/05/25（周一），所以本周已经是全新周期。</div></div></div>
+            <div class="week-board">${weekDays}</div>
+            <div class="reward-list">
+              <div class="mini-card ${rewardDone(3)}"><strong>3 天达标</strong><div class="hint">创造力 +4，影响力 +2</div></div>
+              <div class="mini-card ${rewardDone(5)}"><strong>5 天达标</strong><div class="hint">变现力 +5，影响力 +3</div></div>
+              <div class="mini-card ${rewardDone(7)}"><strong>7 天达标</strong><div class="hint">创造力 +6，变现力 +6，影响力 +4</div></div>
+            </div>
+            <div class="footer-note">任何创作动作都会计入本周记录：<span class="accent">保存灵感、写心得、勾选创作类任务、更新数据面板</span> 都算。</div>
+          </section>
+        </div>
+      `;
+    }
+    function tasksHTML() {
+      const visible = getVisibleStages(state.tasks);
+      return `<section class="panel"><div class="section-title"><div><h2>成就任务</h2><div class="section-desc">按你的要求，任务阶段现在采用渐进展示：<span class="accent">已解锁阶段全部可见 + 仅展示下一个未解锁阶段</span>，更远的阶段先隐藏，不制造额外压力。</div></div></div><div class="task-stage-wrap">${visible.map(stage => `
+        <article class="task-card ${stage.unlocked ? '' : 'locked'}">
+          <div class="task-header">
+            <div><h3>${stage.icon} ${stage.title}</h3><div class="meta">${stage.summary} · 进度 ${stage.tasks.filter(t => t.checked).length}/${stage.tasks.length} · ${stage.unlocked ? '已解锁' : '下一阶段预告'}</div></div>
+            <div class="badge">${stage.unlocked ? stageProgress(stage) + '%' : 'LOCKED'}</div>
+          </div>
+          <div class="task-list">${stage.tasks.map(task => `
+            <label class="task-item ${task.checked ? 'done' : ''}">
+              <input type="checkbox" data-stage="${stage.key}" data-task="${task.id}" ${task.checked ? 'checked' : ''} ${stage.unlocked ? '' : 'disabled'} />
+              <div><strong>${task.text}</strong><span>${task.type === 'creative' ? '创作型任务：完成后自动计入本周创作记录。' : '系统型任务：更偏流程和变现建设。'}</span></div>
+              <div class="task-reward">${task.reward}</div>
+            </label>
+          `).join('')}</div>
+        </article>`).join('')}</div></section>`;
+    }
+    function workshopHTML() {
+      const ideas = state.ideas.map(item => `<div class="entry"><div class="top"><strong>${item.title}</strong><span class="type">${item.type}</span></div><p>${item.body}</p><div class="footer-note">记录时间：${formatDate(item.createdAt)}</div></div>`).join('');
+      const diary = state.diary.map(item => `<div class="entry"><div class="top"><strong>${item.title}</strong><span class="type">${item.mood}</span></div><p>${item.body}</p><div class="footer-note">记录时间：${formatDate(item.createdAt)}</div></div>`).join('');
+      return `
+        <div class="grid-2">
+          <section class="panel">
+            <div class="section-title"><div><h2>Creator Workshop · 素材库</h2><div class="section-desc">任何灵感先落地，再慢慢打磨。保存这里会自动计入本周创作记录。</div></div></div>
+            <form class="form" id="ideaForm">
+              <div class="row-2"><input name="ideaTitle" placeholder="这条灵感的标题" /><select name="ideaType"><option>观点素材</option><option>求职转化</option><option>留学内容</option><option>商业化脚本</option></select></div>
+              <textarea name="ideaBody" placeholder="写下这条内容的核心判断、故事线或口播方向"></textarea>
+              <div class="btn-row"><button class="action" type="submit">保存灵感</button></div>
+            </form>
+            <div class="entry-list">${ideas || '<div class="empty">还没有新增灵感，先把脑子里最想说的一句写下来。</div>'}</div>
+          </section>
+          <section class="panel">
+            <div class="section-title"><div><h2>心得本</h2><div class="section-desc">这里不是空泛鸡汤，而是让你把每次推进后的判断沉淀下来。</div></div></div>
+            <form class="form" id="diaryForm">
+              <div class="row-2"><input name="diaryTitle" placeholder="今天这条复盘的标题" /><select name="diaryMood"><option>稳住</option><option>突破</option><option>复盘</option><option>提醒自己</option></select></div>
+              <textarea name="diaryBody" placeholder="今天做成了什么、卡住了什么、下一步最应该继续推什么"></textarea>
+              <div class="btn-row"><button class="action" type="submit">写入心得本</button></div>
+            </form>
+            <div class="entry-list">${diary || '<div class="empty">还没有新的心得记录，今天哪怕只写 3 句话也算推进。</div>'}</div>
+          </section>
+        </div>
+      `;
+    }
+    function dataHTML() {
+      const m = state.metrics;
+      const bars = m.weeklyContent.map((value, index) => `<div class="bar"><i style="height:${30 + value * 38}px"></i><span>${weekLabels[index]}</span></div>`).join('');
+      return `
+        <div class="grid-2">
+          <section class="panel">
+            <div class="section-title"><div><h2>数据面板</h2><div class="section-desc">给自己一个能看见增长的地方。每次更新数据，也算一次认真经营。</div></div></div>
+            <div class="metric-grid">
+              <div class="metric-card"><div class="label">粉丝数</div><div class="num">${m.followers}</div><div class="sub">影响力参考</div></div>
+              <div class="metric-card"><div class="label">点赞</div><div class="num">${m.likes}</div><div class="sub">内容反馈</div></div>
+              <div class="metric-card"><div class="label">收藏</div><div class="num">${m.saves}</div><div class="sub">转化意向</div></div>
+              <div class="metric-card"><div class="label">副业收入</div><div class="num">¥${m.revenue}</div><div class="sub">变现力参考</div></div>
+            </div>
+            <div class="chart-box">${bars}</div>
+            <div class="footer-note">柱状图展示一周内容动作热度。现在是周一，所以本周记录从今天重新开始。</div>
+          </section>
+          <section class="panel">
+            <div class="section-title"><div><h2>手动更新最新数据</h2><div class="section-desc">如果你刷新了平台数据，直接在这里改。提交后会自动同步属性估算。</div></div></div>
+            <form class="form" id="metricForm">
+              <div class="row-2"><input name="followers" type="number" min="0" value="${m.followers}" /><input name="likes" type="number" min="0" value="${m.likes}" /></div>
+              <div class="row-2"><input name="saves" type="number" min="0" value="${m.saves}" /><input name="revenue" type="number" min="0" value="${m.revenue}" /></div>
+              <div class="btn-row"><button class="action" type="submit">更新数据</button><button class="ghost" type="button" id="resetBtn">恢复初始样例</button></div>
+            </form>
+            <div class="entry-list">${state.weekly.actions.slice(0,6).map(item => `<div class="entry"><div class="top"><strong>${item.label}</strong><span class="type">${item.source}</span></div><div class="footer-note">${formatDate(item.at)}</div></div>`).join('') || '<div class="empty">这里会显示最近的创作动作。</div>'}</div>
+          </section>
+        </div>
+      `;
+    }
+    function render() {
+      const app = document.getElementById('app');
+      const tabs = [
+        { key: 'overview', title: 'Overview', desc: '角色属性与本周创作记录' },
+        { key: 'tasks', title: 'Achievement Tasks', desc: '主线任务与渐进解锁' },
+        { key: 'workshop', title: 'Creator Workshop', desc: '素材库 + 心得本' },
+        { key: 'data', title: 'Data', desc: '内容数据与副业经营看板' }
+      ];
+      const active = state.activeTab;
+      app.innerHTML = `
+        <header class="hero">
+          <div class="hero-top">
+            <div>
+              <div class="tag">Creator Camp · Ultimate Version</div>
+              <h1>甜一昂的创作者营地</h1>
+              <p class="subtitle">把“副业成就系统”升级成一个真正能长期陪你推进的 Creator Camp：上面看全局，下面拆任务，中间放素材和复盘，最后用数据收口。逻辑已经按照你最后一版要求重构成 4 个 Tab。</p>
+            </div>
+            <div class="hero-side">
+              <div class="attr-name">本周状态</div>
+              <div class="big">${state.weekly.activeDays.length}/7 天</div>
+              <div class="small">任意创作动作都会点亮本周记录。今天是本周第一天，正适合重新起势。</div>
+            </div>
+          </div>
+          <div class="tabs">${tabs.map(tab => `<button class="tab-btn ${tab.key === active ? 'active' : ''}" data-tab="${tab.key}"><strong>${tab.title}</strong><span>${tab.desc}</span></button>`).join('')}</div>
+        </header>
+        <main>
+          <section class="tab-panel ${active === 'overview' ? 'active' : ''}" id="panel-overview">${overviewHTML()}</section>
+          <section class="tab-panel ${active === 'tasks' ? 'active' : ''}" id="panel-tasks">${tasksHTML()}</section>
+          <section class="tab-panel ${active === 'workshop' ? 'active' : ''}" id="panel-workshop">${workshopHTML()}</section>
+          <section class="tab-panel ${active === 'data' ? 'active' : ''}" id="panel-data">${dataHTML()}</section>
+        </main>
+      `;
+      bindEvents();
+    }
+    function bindEvents() {
+      document.querySelectorAll('[data-tab]').forEach(btn => btn.onclick = () => setTab(btn.dataset.tab));
+      document.querySelectorAll('.task-item input[type="checkbox"]').forEach(input => {
+        input.onchange = () => handleTaskToggle(input.dataset.stage, input.dataset.task);
+      });
+      const ideaForm = document.getElementById('ideaForm');
+      if (ideaForm) ideaForm.onsubmit = e => { e.preventDefault(); addIdea(ideaForm); };
+      const diaryForm = document.getElementById('diaryForm');
+      if (diaryForm) diaryForm.onsubmit = e => { e.preventDefault(); addDiary(diaryForm); };
+      const metricForm = document.getElementById('metricForm');
+      if (metricForm) metricForm.onsubmit = e => { e.preventDefault(); updateMetrics(metricForm); };
+      const resetBtn = document.getElementById('resetBtn');
+      if (resetBtn) resetBtn.onclick = resetAll;
+    }
+    render();
+  </script>
+</body>
+</html>
