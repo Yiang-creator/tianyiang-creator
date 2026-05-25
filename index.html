@@ -166,6 +166,7 @@
       display: grid;
       grid-template-columns: 1.12fr .88fr;
       gap: 16px;
+      align-items: stretch;
     }
     .role-card, .narration-card, .tab-btn, .info-card, .section, .stage-card, .attr-card, .metric-card, .record-card, .consult-card {
       border-radius: 24px;
@@ -212,6 +213,8 @@
       flex-direction: column;
       justify-content: space-between;
       background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.025));
+      height: 100%;
+      align-self: stretch;
     }
     .narration-text { margin-top: 12px; color: var(--muted); line-height: 1.85; font-size: 14px; }
     .info-grid {
@@ -1115,11 +1118,25 @@
                   </div>
                 </section>
                 <section class="narration-card glass">
-                  <div>
-                    <div class="small-label">章节旁白</div>
-                    <p class="narration-text">这一章的名字，叫做“认真开始之后，命运也会给你回音”。内容主线负责把你的声音送出去，秘密据点负责把能力变成承接与成交。你不是在机械打卡，而是在一页页写出属于自己的传奇版本。</p>
+                  <div style="flex: 1; display: flex; flex-direction: column;">
+                    <div class="small-label" style="display:flex; justify-content:space-between; align-items:center;">
+                      <span>章节旁白</span>
+                      <span class="mini-tag" style="background:rgba(151,239,204,0.15); color:var(--mint); border-color:rgba(151,239,204,0.3);">连载中</span>
+                    </div>
+                    <p class="narration-text" style="margin-top: 12px; flex: 1;">这一章的名字，叫做“认真开始之后，命运也会给你回音”。内容主线负责把你的声音送出去，秘密据点负责把能力变成承接与成交。你不是在机械打卡，而是在一页页写出属于自己的传奇版本。</p>
+                    
+                    <div style="margin-top: 16px; padding: 12px; border-radius: 16px; background: rgba(255,255,255,0.03); border: 1px solid var(--line-soft);">
+                      <div class="small-label" style="color:var(--muted); font-size: 11px; margin-bottom: 8px;">当前章节目标</div>
+                      <div style="display:flex; align-items:center; gap:10px;">
+                        <span style="font-size:18px;">✨</span>
+                        <div style="flex: 1;">
+                          <div style="font-size:14px; font-weight:700; color:var(--gold);">${current.title} · 全任务达成</div>
+                          <div class="progress" style="margin-top: 6px; height: 6px;"><i style="--w:${stagePercent(current)}%"></i></div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <div class="footer-note">下一段剧情提示：先把最轻的起步任务做掉，副本的第一道门才会真正打开。</div>
+                  <div class="footer-note" style="margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--line-soft);">下一段剧情提示：先把最轻的起步任务做掉，副本的第一道门才会真正打开。</div>
                 </section>
               </div>
               <div class="info-grid">
