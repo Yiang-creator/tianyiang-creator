@@ -176,7 +176,7 @@
       display: grid;
       grid-template-columns: 1.12fr .88fr;
       gap: 16px;
-      align-items: stretch;
+      align-items: start;
     }
     .role-card, .narration-card, .tab-btn, .info-card, .section, .stage-card, .attr-card, .metric-card, .record-card, .consult-card {
       border-radius: 24px;
@@ -227,13 +227,11 @@
     .narration-card {
       display: flex;
       flex-direction: column;
-      justify-content: flex-start;
-      gap: 20px;
+      gap: 16px;
       background: var(--panel);
       border: 1px solid rgba(255, 220, 180, 0.18);
       box-shadow: 0 18px 60px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.06);
       backdrop-filter: blur(14px);
-      align-self: stretch;
     }
     .narration-text { margin-top: 12px; color: var(--muted); line-height: 1.85; font-size: 14px; }
     .info-grid {
@@ -1155,19 +1153,19 @@
                     <div class="small-label">章节旁白</div>
                     <p class="narration-text">这一章的名字，叫做“认真开始之后，命运也会给你回音”。内容主线负责把你的声音送出去，秘密据点负责把能力变成承接与成交。你不是在机械打卡，而是在一页页写出属于自己的传奇版本。</p>
                   </div>
-                  <div style="padding: 12px 0; border-top: 1px solid var(--line-soft);">
-                    <div class="small-label" style="opacity: 0.6; font-size: 10px; margin-bottom: 8px;">副本即时同步</div>
+                  <div style="padding: 12px 0; border-top: 1px solid rgba(255, 220, 180, 0.14);">
+                    <div class="small-label" style="font-size: 11px; margin-bottom: 8px; letter-spacing: 0.1em;">副本即时同步</div>
                     <div style="display: grid; gap: 6px;">
                       <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span style="font-size: 12px; color: var(--muted);">副本进度</span>
+                        <span style="font-size: 12px; color: var(--text-soft);">副本进度</span>
                         <span style="font-size: 12px; color: var(--gold); font-weight: 600;">${stagePercent(current)}%</span>
                       </div>
                       <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span style="font-size: 12px; color: var(--muted);">激励提示</span>
+                        <span style="font-size: 12px; color: var(--text-soft);">激励提示</span>
                         <span style="font-size: 12px; color: var(--rose);">光芒在前方，女王请继续</span>
                       </div>
                       <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span style="font-size: 12px; color: var(--muted);">目标预告</span>
+                        <span style="font-size: 12px; color: var(--text-soft);">目标预告</span>
                         <span style="font-size: 12px; color: var(--rose-deep);">回声引路人</span>
                       </div>
                     </div>
