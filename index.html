@@ -3,363 +3,607 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>甜一昂 · Creator Camp</title>
+  <title>副业成就系统 · 甜一昂的光芒副本</title>
   <style>
     :root {
-      --bg: #080914;
-      --panel: rgba(18, 20, 36, 0.74);
-      --panel-strong: rgba(24, 27, 47, 0.92);
-      --line: rgba(255,255,255,0.08);
+      --bg: #060814;
+      --bg-2: #0a1022;
+      --panel: rgba(14, 18, 35, 0.72);
+      --panel-strong: rgba(16, 21, 42, 0.9);
+      --line: rgba(255,255,255,0.09);
+      --line-soft: rgba(255,255,255,0.06);
+      --text: #f7f3ff;
+      --muted: #c9c0dd;
+      --soft: #968cb5;
       --gold: #f6d79d;
-      --rose: #f0a8c6;
-      --pink: #ffbfd4;
-      --text: #f6f1ff;
-      --muted: #c4bdd9;
-      --soft: #9f96bd;
-      --mint: #9fe7cf;
-      --violet: #9f8cff;
-      --danger: #ff8ab1;
-      --shadow: 0 18px 60px rgba(0, 0, 0, 0.42);
+      --gold-2: #ffd98c;
+      --pink: #f3a9c9;
+      --violet: #a68dff;
+      --cyan: #8ae7ff;
+      --mint: #97efcc;
+      --danger: #ff8db4;
+      --success: #8ff0c0;
+      --shadow: 0 24px 70px rgba(0,0,0,.42);
+      --radius: 26px;
     }
     * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
     body {
-      margin: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
       color: var(--text);
       background:
-        radial-gradient(circle at top left, rgba(175, 141, 255, 0.18), transparent 26%),
-        radial-gradient(circle at top right, rgba(255, 182, 210, 0.14), transparent 28%),
-        linear-gradient(180deg, #080914 0%, #0a1021 45%, #070a14 100%);
-      min-height: 100vh;
+        radial-gradient(circle at 20% 10%, rgba(145, 111, 255, .18), transparent 24%),
+        radial-gradient(circle at 80% 0%, rgba(255, 181, 210, .12), transparent 22%),
+        radial-gradient(circle at 50% 100%, rgba(105, 156, 255, .10), transparent 35%),
+        linear-gradient(180deg, #04060f 0%, #09101f 45%, #050814 100%);
+      overflow-x: hidden;
     }
-    body::before {
+    body::before, body::after {
       content: "";
       position: fixed;
       inset: 0;
       pointer-events: none;
+      z-index: 0;
+    }
+    body::before {
       background-image:
-        radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,.7), transparent),
-        radial-gradient(1.5px 1.5px at 80% 12%, rgba(255,255,255,.55), transparent),
-        radial-gradient(1.5px 1.5px at 66% 72%, rgba(255,255,255,.42), transparent),
-        radial-gradient(2px 2px at 34% 84%, rgba(255,255,255,.52), transparent),
-        radial-gradient(1.5px 1.5px at 10% 70%, rgba(255,255,255,.38), transparent);
-      opacity: .75;
+        radial-gradient(2px 2px at 8% 18%, rgba(255,255,255,.8), transparent),
+        radial-gradient(1.5px 1.5px at 22% 76%, rgba(255,255,255,.55), transparent),
+        radial-gradient(1.5px 1.5px at 48% 32%, rgba(255,255,255,.45), transparent),
+        radial-gradient(2px 2px at 74% 24%, rgba(255,255,255,.5), transparent),
+        radial-gradient(1.5px 1.5px at 90% 80%, rgba(255,255,255,.58), transparent),
+        radial-gradient(1px 1px at 64% 58%, rgba(255,255,255,.3), transparent),
+        radial-gradient(1px 1px at 38% 88%, rgba(255,255,255,.35), transparent);
+      opacity: .9;
+      animation: twinkle 8s linear infinite alternate;
+    }
+    body::after {
+      background:
+        linear-gradient(120deg, transparent 0%, transparent 46%, rgba(255,255,255,.34) 49%, rgba(255,229,188,.7) 50%, transparent 54%, transparent 100%);
+      width: 42vw;
+      height: 2px;
+      left: -45vw;
+      top: 12vh;
+      transform: rotate(-12deg);
+      animation: meteor 7.2s linear infinite;
+      opacity: .9;
+      box-shadow: 0 0 18px rgba(255,229,188,.45);
+    }
+    @keyframes twinkle { from { opacity:.68; } to { opacity:1; } }
+    @keyframes meteor {
+      0% { transform: translateX(0) translateY(0) rotate(-12deg); opacity:0; }
+      8% { opacity: .95; }
+      38% { opacity: .95; }
+      60% { opacity: 0; }
+      100% { transform: translateX(145vw) translateY(34vh) rotate(-12deg); opacity:0; }
+    }
+    @keyframes floatGlow { from { transform: translateY(0); } to { transform: translateY(-6px); } }
+    @keyframes fillBar { from { width: 0; } }
+    @keyframes popupIn {
+      from { transform: translate(-50%, -40%) scale(.88); opacity: 0; }
+      to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    }
+    @keyframes particleFly {
+      from { transform: translate(0,0) scale(1); opacity: 1; }
+      to { transform: translate(var(--x), var(--y)) scale(.35); opacity: 0; }
     }
     .app {
-      width: min(1180px, calc(100vw - 28px));
-      margin: 28px auto 54px;
+      width: min(1220px, calc(100vw - 26px));
+      margin: 22px auto 42px;
       position: relative;
       z-index: 1;
     }
-    .hero, .card, .panel, .task-card, .metric-card, .mini-card, .week-day {
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
+    .glass {
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       background: var(--panel);
       border: 1px solid var(--line);
       box-shadow: var(--shadow);
     }
     .hero {
-      border-radius: 28px;
-      padding: 24px;
       position: relative;
       overflow: hidden;
+      border-radius: 32px;
+      padding: 26px;
       background:
-        linear-gradient(145deg, rgba(19,22,43,.95), rgba(24,22,49,.84)),
-        var(--panel);
+        radial-gradient(circle at 86% 18%, rgba(255,217,155,.16), transparent 20%),
+        radial-gradient(circle at 18% 0%, rgba(166,141,255,.18), transparent 26%),
+        linear-gradient(145deg, rgba(14,18,35,.94), rgba(13,18,39,.82));
     }
-    .hero::after {
+    .hero::before {
       content: "";
       position: absolute;
-      right: -60px;
-      top: -60px;
-      width: 220px;
-      height: 220px;
+      right: -40px;
+      top: -50px;
+      width: 240px;
+      height: 240px;
       border-radius: 999px;
-      background: radial-gradient(circle, rgba(255, 212, 154, .24), transparent 68%);
+      background: radial-gradient(circle, rgba(246,215,157,.18), transparent 68%);
       pointer-events: none;
+      animation: floatGlow 4s ease-in-out infinite alternate;
     }
     .hero-top {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+    .title-block {
       display: flex;
       justify-content: space-between;
       gap: 18px;
-      flex-wrap: wrap;
       align-items: flex-start;
+      flex-wrap: wrap;
     }
-    .tag {
+    .english-tag, .mini-tag {
       display: inline-flex;
-      padding: 6px 12px;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
       border-radius: 999px;
-      border: 1px solid rgba(246, 215, 157, .3);
+      border: 1px solid rgba(246,215,157,.28);
       color: var(--gold);
-      letter-spacing: .18em;
-      font-size: 12px;
-      text-transform: uppercase;
       background: rgba(255,255,255,.04);
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      font-size: 12px;
     }
     h1,h2,h3,p { margin: 0; }
-    .hero h1 { font-size: clamp(28px, 4vw, 42px); margin-top: 12px; }
-    .subtitle { color: var(--muted); margin-top: 10px; line-height: 1.7; max-width: 720px; }
-    .hero-side {
-      min-width: 250px;
-      padding: 18px;
+    .main-title { margin-top: 14px; font-size: clamp(34px, 5vw, 58px); letter-spacing: .02em; }
+    .subtitle { margin-top: 12px; color: var(--muted); line-height: 1.8; max-width: 760px; font-size: 14px; }
+    .state-badge {
+      min-width: 245px;
+      padding: 16px 18px;
       border-radius: 22px;
       background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
       border: 1px solid rgba(255,255,255,.08);
     }
-    .hero-side .big { font-size: 30px; font-weight: 800; color: var(--gold); margin-top: 6px; }
-    .hero-side .small { color: var(--muted); font-size: 13px; margin-top: 6px; line-height: 1.6; }
-    .tabs {
+    .state-badge .line1 { color: var(--muted); font-size: 12px; }
+    .state-badge .line2 { margin-top: 7px; font-size: 30px; font-weight: 800; color: var(--gold); }
+    .state-badge .line3 { margin-top: 6px; color: var(--muted); font-size: 13px; line-height: 1.6; }
+    .hero-panels {
+      margin-top: 22px;
+      display: grid;
+      grid-template-columns: 1.12fr .88fr;
+      gap: 16px;
+    }
+    .role-card, .narration-card, .tab-btn, .info-card, .section, .stage-card, .attr-card, .metric-card, .record-card, .consult-card {
+      border-radius: 24px;
+      padding: 18px;
+    }
+    .role-card {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      gap: 18px;
+      align-items: center;
+      position: relative;
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.025));
+    }
+    .role-avatar {
+      width: 110px;
+      height: 110px;
+      border-radius: 28px;
+      display: grid;
+      place-items: center;
+      font-size: 48px;
+      background: linear-gradient(145deg, rgba(246,215,157,.22), rgba(240,168,198,.12));
+      border: 1px solid rgba(246,215,157,.28);
+      box-shadow: inset 0 0 30px rgba(255,255,255,.06);
+    }
+    .small-label { color: var(--gold); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; }
+    .role-name { font-size: clamp(30px, 4vw, 40px); margin-top: 8px; }
+    .level-line { margin-top: 8px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .level-pill, .title-pill, .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.08);
+      color: var(--text);
+    }
+    .role-desc { margin-top: 10px; color: var(--muted); line-height: 1.7; font-size: 14px; }
+    .mini-stats { margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap; }
+    .mini-stats .badge-pill { color: var(--muted); }
+    .narration-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.025));
+    }
+    .narration-text { margin-top: 12px; color: var(--muted); line-height: 1.85; font-size: 14px; }
+    .info-grid {
       margin-top: 18px;
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 12px;
     }
-    .tab-btn {
-      border: 1px solid rgba(255,255,255,.08);
-      background: rgba(255,255,255,.04);
-      color: var(--muted);
-      border-radius: 18px;
-      padding: 14px 16px;
-      text-align: left;
-      cursor: pointer;
-      transition: .22s ease;
+    .info-card { background: rgba(255,255,255,.045); }
+    .info-card .k { font-size: 12px; color: var(--muted); }
+    .info-card .v { margin-top: 10px; font-size: 28px; font-weight: 800; color: var(--gold); }
+    .info-card .s { margin-top: 8px; color: var(--soft); font-size: 12px; line-height: 1.6; }
+    .chapter-track {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 12px;
+      align-items: stretch;
     }
-    .tab-btn strong { display: block; color: var(--text); margin-bottom: 4px; font-size: 15px; }
-    .tab-btn.active {
-      background: linear-gradient(135deg, rgba(247, 215, 157, .18), rgba(238, 168, 198, .16));
-      border-color: rgba(246,215,157,.25);
-      transform: translateY(-1px);
+    .section {
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.025));
     }
-    .tab-btn:hover { transform: translateY(-1px); }
-    .tab-btn span { font-size: 12px; line-height: 1.5; display: block; }
-    .tab-panel { display: none; margin-top: 20px; }
-    .tab-panel.active { display: block; }
-    .grid-2, .grid-3, .grid-4 { display: grid; gap: 16px; }
-    .grid-2 { grid-template-columns: 1.15fr .85fr; }
-    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-    .card, .panel { border-radius: 24px; padding: 20px; }
-    .section-title { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 16px; }
-    .section-title h2 { font-size: 20px; }
-    .section-desc { color: var(--muted); font-size: 13px; line-height: 1.6; }
-    .attr-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
-    .attr {
-      padding: 16px;
-      border-radius: 20px;
-      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.025));
-      border: 1px solid rgba(255,255,255,.06);
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+      margin-bottom: 14px;
     }
-    .attr-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
-    .attr-name { font-size: 13px; color: var(--muted); }
-    .attr-value { font-size: 28px; font-weight: 800; }
-    .progress {
-      margin-top: 12px;
-      height: 10px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.08);
-      overflow: hidden;
-    }
+    .section-head h2 { font-size: 22px; }
+    .section-desc { color: var(--muted); font-size: 13px; line-height: 1.7; margin-top: 6px; }
+    .story-line { color: var(--muted); line-height: 1.8; font-size: 14px; }
+    .progress-box { margin-top: 14px; }
+    .progress-top { display: flex; justify-content: space-between; gap: 10px; font-size: 13px; color: var(--muted); }
+    .progress { margin-top: 10px; height: 12px; border-radius: 999px; overflow: hidden; background: rgba(255,255,255,.08); }
     .progress > i {
       display: block;
       height: 100%;
       border-radius: inherit;
-      background: linear-gradient(90deg, var(--gold), var(--rose));
-      box-shadow: 0 0 18px rgba(240,168,198,.35);
+      width: var(--w, 0%);
+      background: linear-gradient(90deg, var(--gold), var(--pink));
+      box-shadow: 0 0 18px rgba(240,168,198,.34);
+      animation: fillBar 1.1s ease both;
     }
-    .hint { color: var(--soft); font-size: 12px; margin-top: 8px; line-height: 1.6; }
-    .pill-row, .list-row { display: flex; flex-wrap: wrap; gap: 10px; }
-    .pill {
-      padding: 9px 12px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.05);
-      border: 1px solid rgba(255,255,255,.07);
+    .tabs {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .tab-btn {
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.045);
       color: var(--muted);
-      font-size: 12px;
+      cursor: pointer;
+      text-align: left;
+      transition: .22s ease;
     }
-    .week-board { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 10px; }
-    .week-day {
-      border-radius: 18px;
-      padding: 14px 10px;
-      text-align: center;
+    .tab-btn:hover, .tab-btn.active {
+      transform: translateY(-2px);
+      border-color: rgba(246,215,157,.3);
+      background: linear-gradient(135deg, rgba(246,215,157,.14), rgba(166,141,255,.12));
+    }
+    .tab-btn strong { display: block; color: var(--text); font-size: 15px; }
+    .tab-btn span { display: block; margin-top: 5px; font-size: 12px; line-height: 1.55; }
+    .tab-panel { display: none; margin-top: 20px; }
+    .tab-panel.active { display: block; }
+    .grid-2, .grid-3, .grid-4 { display: grid; gap: 16px; }
+    .grid-2 { grid-template-columns: 1.06fr .94fr; }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .attr-title-row { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; margin-bottom: 14px; }
+    .attr-grid { display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .attr-card {
       background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.025));
+      border: 1px solid var(--line-soft);
     }
-    .week-day.active { border-color: rgba(159,231,207,.42); box-shadow: 0 10px 24px rgba(159,231,207,.1); }
-    .week-day .date { color: var(--soft); font-size: 11px; margin-top: 6px; }
-    .week-day .dot {
-      width: 12px; height: 12px; border-radius: 50%; margin: 10px auto 0;
-      background: rgba(255,255,255,.14);
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.1);
-    }
-    .week-day.active .dot { background: linear-gradient(135deg, var(--mint), var(--gold)); box-shadow: 0 0 18px rgba(159,231,207,.3); }
-    .reward-list { margin-top: 14px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-    .mini-card {
-      border-radius: 18px; padding: 14px; background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
-    }
-    .mini-card.done { border-color: rgba(246,215,157,.3); }
-    .task-stage-wrap { display: grid; gap: 14px; }
-    .task-card {
-      border-radius: 22px; padding: 18px; background: linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.02));
-    }
-    .task-card.locked { opacity: .78; border-style: dashed; }
-    .task-header { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
-    .task-header .meta { color: var(--muted); font-size: 12px; margin-top: 6px; }
-    .badge {
-      white-space: nowrap; padding: 8px 12px; border-radius: 999px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.08); color: var(--gold); font-size: 12px;
-    }
-    .task-list { margin-top: 14px; display: grid; gap: 10px; }
+    .attr-top { display:flex; justify-content:space-between; gap:10px; align-items:flex-start; }
+    .attr-name { font-size: 20px; font-weight: 700; margin-top: 4px; }
+    .attr-icon { font-size: 24px; }
+    .attr-value { text-align:right; }
+    .attr-value .num { color: var(--gold); font-size: 32px; font-weight: 800; }
+    .attr-value .rank { color: var(--muted); font-size: 12px; margin-top: 4px; }
+    .attr-copy { margin-top: 12px; color: var(--muted); line-height: 1.7; font-size: 13px; min-height: 66px; }
+    .attr-bottom { margin-top: 10px; display:flex; justify-content:space-between; gap:12px; color: var(--soft); font-size: 11px; line-height: 1.6; }
+    .record-list, .entry-list, .consult-list { display:grid; gap:12px; margin-top: 16px; }
+    .record-card, .metric-card, .consult-card, .stage-card { background: linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.02)); border: 1px solid var(--line-soft); }
+    .metric-grid { display:grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+    .metric-card .label { color: var(--muted); font-size: 12px; }
+    .metric-card .num { margin-top: 8px; font-size: 28px; font-weight: 800; color: var(--gold); }
+    .metric-card .sub { margin-top: 6px; color: var(--soft); font-size: 12px; line-height: 1.6; }
+    .stage-wrap { display:grid; gap:14px; }
+    .stage-card.locked { opacity: .76; border-style: dashed; }
+    .stage-head { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; }
+    .stage-head h3 { font-size: 22px; }
+    .stage-head .meta { margin-top: 7px; color: var(--muted); font-size: 13px; line-height: 1.7; }
+    .stage-badge { padding: 8px 12px; border-radius: 999px; background: rgba(255,255,255,.05); color: var(--gold); border: 1px solid rgba(255,255,255,.08); white-space: nowrap; font-size: 12px; }
+    .task-list { margin-top: 14px; display:grid; gap: 10px; }
     .task-item {
-      display: grid; grid-template-columns: 22px 1fr auto; gap: 12px; align-items: flex-start;
-      border-radius: 18px; padding: 14px; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.06);
+      position: relative;
+      display:grid;
+      grid-template-columns: 22px 1fr auto;
+      gap: 12px;
+      align-items:flex-start;
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.07);
+      overflow: hidden;
     }
-    .task-item input { margin-top: 4px; accent-color: #ffbfd4; width: 18px; height: 18px; }
-    .task-item strong { display:block; font-size: 15px; }
-    .task-item span { display:block; margin-top: 5px; color: var(--muted); font-size: 12px; line-height: 1.6; }
-    .task-reward { color: var(--gold); font-size: 12px; }
-    .task-item.done { border-color: rgba(159,231,207,.25); background: linear-gradient(135deg, rgba(159,231,207,.08), rgba(255,255,255,.03)); }
-    .form { display: grid; gap: 12px; }
-    .row-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .task-item.done { border-color: rgba(143,240,192,.25); background: linear-gradient(135deg, rgba(143,240,192,.08), rgba(255,255,255,.03)); }
+    .task-item input { margin-top: 3px; width: 18px; height: 18px; accent-color: #ffbfd4; }
+    .task-item strong { display:block; font-size:15px; }
+    .task-item span { display:block; margin-top:6px; color: var(--muted); font-size:12px; line-height:1.7; }
+    .task-reward { color: var(--gold); font-size:12px; white-space: nowrap; }
+    .form { display:grid; gap:12px; }
+    .row-2 { display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap:12px; }
     input, textarea, select {
-      width: 100%; border: 1px solid rgba(255,255,255,.09); background: rgba(9, 11, 23, .62); color: var(--text);
-      border-radius: 16px; padding: 12px 14px; font: inherit; outline: none;
+      width: 100%;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(8, 11, 25, .72);
+      color: var(--text);
+      padding: 12px 14px;
+      font: inherit;
+      outline: none;
     }
-    input::placeholder, textarea::placeholder { color: #9087ad; }
-    textarea { min-height: 96px; resize: vertical; }
-    .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    input::placeholder, textarea::placeholder { color: #8d84aa; }
+    textarea { min-height: 98px; resize: vertical; }
+    .btn-row { display:flex; gap:10px; flex-wrap:wrap; }
+    button.action, button.ghost {
+      border-radius: 16px;
+      padding: 12px 16px;
+      font: inherit;
+      cursor: pointer;
+    }
     button.action {
-      border: none; cursor: pointer; color: #0f1124; font-weight: 700; border-radius: 16px; padding: 12px 16px;
-      background: linear-gradient(135deg, var(--gold), var(--rose));
+      border: none;
+      color: #0c1022;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--gold), var(--pink));
     }
     button.ghost {
-      border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.04); color: var(--text); border-radius: 16px; padding: 12px 16px; cursor: pointer;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.04);
+      color: var(--text);
     }
-    .entry-list { display: grid; gap: 12px; margin-top: 16px; }
     .entry {
-      padding: 14px; border-radius: 18px; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.06);
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.06);
     }
-    .entry .top { display:flex; justify-content:space-between; gap:10px; }
-    .entry .top strong { font-size: 15px; }
-    .entry .type { color: var(--gold); font-size: 12px; }
-    .entry p { margin-top: 8px; color: var(--muted); line-height: 1.7; font-size: 13px; white-space: pre-wrap; }
-    .empty { padding: 22px; border-radius: 18px; border: 1px dashed rgba(255,255,255,.1); color: var(--soft); text-align: center; }
-    .metric-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12px; }
-    .metric-card { border-radius: 18px; padding: 16px; background: linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.02)); }
-    .metric-card .label { color: var(--muted); font-size: 12px; }
-    .metric-card .num { font-size: 26px; font-weight: 800; margin-top: 8px; }
-    .metric-card .sub { color: var(--soft); font-size: 12px; margin-top: 6px; }
-    .chart-box { height: 240px; display: flex; align-items: flex-end; gap: 10px; margin-top: 14px; }
-    .bar { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 8px; }
-    .bar i { width: 100%; border-radius: 14px 14px 6px 6px; background: linear-gradient(180deg, rgba(246,215,157,.95), rgba(240,168,198,.72)); box-shadow: 0 10px 24px rgba(240,168,198,.18); }
-    .bar span { font-size: 12px; color: var(--muted); }
-    .footer-note { color: var(--soft); font-size: 12px; line-height: 1.7; margin-top: 14px; }
+    .entry .top { display:flex; justify-content:space-between; gap:12px; }
+    .entry .top strong { font-size:15px; }
+    .entry .type { font-size: 12px; color: var(--gold); }
+    .entry p { margin-top: 8px; color: var(--muted); font-size: 13px; line-height: 1.75; white-space: pre-wrap; }
+    .footer-note { margin-top: 12px; color: var(--soft); font-size: 12px; line-height: 1.7; }
+    .empty { padding: 22px; text-align:center; color: var(--soft); border: 1px dashed rgba(255,255,255,.1); border-radius: 18px; }
+    .chart-box { height: 240px; display:flex; align-items:flex-end; gap:10px; margin-top: 14px; }
+    .bar { flex:1; display:flex; flex-direction:column; align-items:center; gap:8px; }
+    .bar i {
+      width:100%;
+      min-height: 24px;
+      height: var(--h, 30px);
+      border-radius: 14px 14px 6px 6px;
+      background: linear-gradient(180deg, rgba(246,215,157,.96), rgba(240,168,198,.72));
+      box-shadow: 0 10px 24px rgba(240,168,198,.18);
+      animation: fillBar .9s ease both;
+    }
+    .bar span { color: var(--muted); font-size: 12px; }
+    .rank-badge { color: var(--gold); }
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(2,5,14,.62);
+      z-index: 10;
+      display: none;
+      backdrop-filter: blur(6px);
+    }
+    .overlay.show { display:block; }
+    .popup {
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: min(420px, calc(100vw - 26px));
+      z-index: 11;
+      display: none;
+      padding: 24px;
+      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(16,21,42,.97), rgba(10,15,30,.92));
+      border: 1px solid rgba(246,215,157,.26);
+      box-shadow: 0 24px 80px rgba(0,0,0,.45);
+      text-align: center;
+      animation: popupIn .28s ease both;
+    }
+    .popup.show { display:block; }
+    .popup .icon { font-size: 44px; }
+    .popup h3 { margin-top: 10px; font-size: 28px; }
+    .popup p { margin-top: 10px; color: var(--muted); line-height: 1.8; font-size: 14px; }
+    .popup .action { margin-top: 16px; }
+    .particles {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .particle {
+      position: absolute;
+      left: 50%; top: 50%;
+      width: 8px; height: 8px;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(255,255,255,.9), rgba(246,215,157,.8));
+      box-shadow: 0 0 14px rgba(246,215,157,.6);
+      animation: particleFly .75s ease-out forwards;
+    }
     .accent { color: var(--gold); }
-    @media (max-width: 980px) {
-      .tabs, .grid-4, .metric-grid, .reward-list, .grid-3, .grid-2, .row-2 { grid-template-columns: 1fr; }
-      .week-board { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    @media (max-width: 1024px) {
+      .hero-top, .hero-panels, .chapter-track, .grid-2, .grid-4, .metric-grid, .tabs, .row-2 { grid-template-columns: 1fr; }
+      .info-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 720px) {
+      .app { width: min(100vw - 16px, 100%); margin: 10px auto 24px; }
+      .hero { padding: 18px; border-radius: 24px; }
+      .main-title { font-size: 34px; }
+      .role-card { grid-template-columns: 1fr; }
+      .role-avatar { width: 90px; height: 90px; }
+      .info-grid, .attr-grid, .grid-3 { grid-template-columns: 1fr; }
       .task-item { grid-template-columns: 22px 1fr; }
       .task-reward { grid-column: 2 / 3; }
-    }
-    @media (max-width: 640px) {
-      .app { width: min(100vw - 18px, 100%); margin: 12px auto 32px; }
-      .hero, .card, .panel { padding: 16px; border-radius: 22px; }
-      .hero-side { width: 100%; }
-      .week-board { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .attr-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
   <div class="app" id="app"></div>
+  <div class="overlay" id="overlay"></div>
+  <div class="popup" id="popup">
+    <div class="icon">🏆</div>
+    <h3 id="popupTitle">称号解锁</h3>
+    <p id="popupBody"></p>
+    <button class="action" id="popupBtn">继续推进主线</button>
+  </div>
   <script>
-    const STORAGE_KEY = 'creator-camp-ultimate-v1';
+    const STORAGE_KEY = 'side-hustle-route-v2-starry';
     const DAY_MS = 24 * 60 * 60 * 1000;
-    const TODAY = new Date('2026-05-25T16:28:00+08:00');
+    const TODAY = new Date('2026-05-25T17:11:00+08:00');
     const weekLabels = ['周一','周二','周三','周四','周五','周六','周日'];
 
-    const stageSeeds = [
+    const mainStageSeeds = [
       {
         key: 'stage1',
-        title: '启程建档',
-        icon: '🌒',
-        summary: '先把创作系统搭起来，让副业不再靠临时起意。',
+        icon: '🌱',
+        title: '启程',
+        narrative: '这是最轻的起步章节，不拼完美，只要把“我终于开始了”这一步真的走出去。',
+        titleReward: '星尘见习生',
         tasks: [
-          { id: 's1-1', text: '整理 10 条个人观点选题，形成第一版弹药库', reward: '创造力 +8 / 触发周记录', type: 'creative' },
-          { id: 's1-2', text: '录下第一条 30 秒口播并完成发布文案', reward: '影响力 +6 / 气场 +4', type: 'creative' },
-          { id: 's1-3', text: '梳理求职辅导产品页：服务项、价格、交付物', reward: '变现力 +9', type: 'system' }
+          { id: 'm1', text: '先把手机内存腾出来，给这条副本留出拍摄空间。', reward: '创作力 +6 / 气场值 +2', type: 'creative' },
+          { id: 'm2', text: '把飞机上整理的那批选题，老老实实存进素材库，别再让灵感失踪。', reward: '创作力 +8', type: 'creative' },
+          { id: 'm3', text: '把“旅行的成本”这条口播录出来，哪怕先录出第一版。', reward: '创作力 +10 / 影响力 +4', type: 'creative' },
+          { id: 'm4', text: '写下你的账号开场白：这一次，你到底想成为什么样的表达者？', reward: '气场值 +4 / 影响力 +2', type: 'creative' }
         ]
       },
       {
         key: 'stage2',
-        title: '稳定输出',
-        icon: '✨',
-        summary: '开始形成固定更新和转化路径。',
+        icon: '🪐',
+        title: '积累',
+        narrative: '从零散爆发，走向持续更新。这个章节考验的不是灵感，而是你愿不愿意一次次把光亮点起来。',
+        titleReward: '星轨记录者',
         tasks: [
-          { id: 's2-1', text: '一周内完成 3 次创作动作并写 1 条复盘', reward: '创造力 +10 / 气场 +3', type: 'creative' },
-          { id: 's2-2', text: '完成第一位咨询用户的线索承接流程', reward: '变现力 +12 / 影响力 +4', type: 'system' },
-          { id: 's2-3', text: '发布 1 条明确表达个人判断的观点内容', reward: '影响力 +8 / 气场 +5', type: 'creative' }
+          { id: 'm5', text: '完成一周 1-2 条口播更新，让账号开始形成自己的节奏。', reward: '创作力 +10 / 影响力 +4', type: 'creative' },
+          { id: 'm6', text: '把一条内容从选题、文案到发布完整走完一次，留下一套可复用流程。', reward: '创作力 +8 / 气场值 +4', type: 'creative' },
+          { id: 'm7', text: '观察并记录一条数据反馈：哪类表达最容易让人停下来听你说完。', reward: '影响力 +6 / 气场值 +2', type: 'creative' }
         ]
       },
       {
         key: 'stage3',
-        title: '放大破圈',
-        icon: '🌟',
-        summary: '用更成熟的内容和产品心智，去拿结果。',
+        icon: '🌠',
+        title: '破圈',
+        narrative: '你已经不只是发内容，而是在训练被看见、被记住、被转述的能力。',
+        titleReward: '回声引路人',
         tasks: [
-          { id: 's3-1', text: '单周新增 5 条高质量灵感素材并完成分类', reward: '创造力 +12', type: 'creative' },
-          { id: 's3-2', text: '记录首个可复用的成交案例模板', reward: '变现力 +15 / 气场 +4', type: 'system' },
-          { id: 's3-3', text: '让内容数据出现一次明显上扬（如点赞/收藏新高）', reward: '影响力 +12 / 气场 +6', type: 'creative' }
+          { id: 'm8', text: '做出一条明显更有判断力的观点内容，让人一听就知道这是你的声音。', reward: '影响力 +10 / 创作力 +6', type: 'creative' },
+          { id: 'm9', text: '拿下一次明显的数据上扬，比如赞藏抬头、涨粉起势，哪怕只是一次。', reward: '影响力 +12 / 气场值 +6', type: 'creative' },
+          { id: 'm10', text: '整理一组“高潜力内容模板”，以后每次卡住都能直接开录。', reward: '创作力 +8 / 气场值 +4', type: 'creative' },
+          { id: 'm11', text: '把一条表现好的内容复盘出来：到底是哪一刀切中了人。', reward: '创作力 +6 / 影响力 +6', type: 'creative' }
         ]
       },
       {
         key: 'stage4',
-        title: '个人IP成型',
         icon: '👑',
-        summary: '最终目标是让表达、成交、影响力都形成稳定闭环。',
+        title: '封神',
+        narrative: '这是高阶里程碑章节。不是为了做梦，而是为了提醒你：这条路本来就可以通往更大的版图。',
+        titleReward: '光芒执笔人',
         tasks: [
-          { id: 's4-1', text: '月度内容矩阵稳定运行：观点输出 + 求职转化双线推进', reward: '全属性提升', type: 'system' },
-          { id: 's4-2', text: '副业收入进入可持续区间', reward: '变现力 +20 / 气场 +8', type: 'system' },
-          { id: 's4-3', text: '形成一套属于自己的创作方法论页面', reward: '影响力 +15 / 创造力 +15', type: 'creative' }
+          { id: 'm12', text: '粉丝破万，让名字真正离开熟人圈，进入更大的视野。', reward: '影响力 +20 / 气场值 +8', type: 'milestone' },
+          { id: 'm13', text: '单月副业收入过万，证明表达不只是热爱，也能成为稳定回报。', reward: '变现力 +20 / 气场值 +8', type: 'milestone' },
+          { id: 'm14', text: '形成一套属于甜一昂的内容方法论页面，让后来者一眼看见你的体系。', reward: '创作力 +12 / 影响力 +12 / 气场值 +8', type: 'milestone' }
         ]
       }
     ];
 
+    const consultStageSeeds = [
+      {
+        key: 'c1',
+        icon: '🗝️',
+        title: '秘密据点 · 建档',
+        narrative: '这是咨询业务的幕后基地。这里不拼热闹，拼的是服务体系和拿结果的能力。',
+        tasks: [
+          { id: 'c1-1', text: '写好服务介绍文案，把你能解决什么、怎么交付、多少钱说清楚。', reward: '变现力 +10 / 气场值 +3', type: 'system' },
+          { id: 'c1-2', text: '把过往案例整理成案例库，至少先收进 3 个能打的样本。', reward: '变现力 +8 / 影响力 +3', type: 'system' },
+          { id: 'c1-3', text: '整理一版咨询流程，从接触、沟通到成交，给自己一条不慌的路径。', reward: '变现力 +8 / 气场值 +4', type: 'system' }
+        ]
+      },
+      {
+        key: 'c2',
+        icon: '📜',
+        title: '秘密据点 · 承接',
+        narrative: '接单不是临场发挥，是让每一个来的人都能稳稳落在你的能力范围里。',
+        tasks: [
+          { id: 'c2-1', text: '记下本月接单目标，别只许愿，要写出具体数字。', reward: '变现力 +6', type: 'system' },
+          { id: 'c2-2', text: '完成一条客户跟进记录，让每个线索都有去向。', reward: '变现力 +8 / 气场值 +2', type: 'system' },
+          { id: 'c2-3', text: '沉淀一个高频问答或辅导模板，下次就不用从零开始。', reward: '创作力 +5 / 变现力 +6', type: 'system' }
+        ]
+      }
+    ];
+
+    const titleLibrary = [
+      { key: 'init', name: '命运副本开启者', desc: '当你愿意认真开始，这条路就已经亮起第一颗星。', condition: s => completedTaskCount(s) >= 1 },
+      { key: 'stage1', name: '星尘见习生', desc: '你已经跨过“只是想想”的门槛。', condition: s => isStageComplete(s.mainStages[0]) },
+      { key: 'stage2', name: '星轨记录者', desc: '稳定输出的人，会慢慢拥有自己的轨道。', condition: s => isStageComplete(s.mainStages[1]) },
+      { key: 'stage3', name: '回声引路人', desc: '你的表达开始留下回响。', condition: s => isStageComplete(s.mainStages[2]) },
+      { key: 'consult', name: '据点掌舵者', desc: '你开始把咨询业务从零散变成阵地。', condition: s => s.consultStages.flatMap(x => x.tasks).filter(t => t.checked).length >= 3 },
+      { key: 'stage4', name: '光芒执笔人', desc: '这是主线后期的名字，写给真正走到高处的人。', condition: s => isStageComplete(s.mainStages[3]) }
+    ];
+
     const defaultState = {
       activeTab: 'overview',
-      tasks: stageSeeds.map((stage, stageIndex) => ({
-        ...stage,
-        unlocked: stageIndex === 0,
-        tasks: stage.tasks.map(task => ({ ...task, checked: false, checkedAt: '' }))
-      })),
+      mainStages: seedWithState(mainStageSeeds),
+      consultStages: seedWithState(consultStageSeeds),
       attributes: {
         creativity: 35,
         influence: 8,
         monetization: 22,
-        auraBase: 58
+        aura: 58
+      },
+      metrics: {
+        followers: 671,
+        likesAndSaves: 268,
+        revenue: 0,
+        weeklyContent: [1, 0, 1, 0, 0, 0, 0]
+      },
+      consult: {
+        monthlyTarget: 3,
+        orders: 0,
+        revenue: 0,
+        records: [
+          { id: 'record-seed-1', title: '本月目标建档', body: '先把接单目标、服务文案、案例库三件套搭起来。', createdAt: TODAY.toISOString(), type: '基地启动' }
+        ]
       },
       ideas: [
-        { id: 'idea-seed-1', title: '为什么很多校招生明明努力，却总在表达上吃亏', body: '拆真实工作场景：不是不会做，是不会把价值讲给别人听。', createdAt: TODAY.toISOString(), type: '观点素材' },
-        { id: 'idea-seed-2', title: '留学一年最值得说的不是见识，而是认知回流', body: '从“看起来厉害”转到“真正能为现在的自己带来什么”。', createdAt: TODAY.toISOString(), type: '留学内容' }
+        { id: 'idea-seed-1', title: '旅行的成本', body: '不是单纯聊花了多少钱，而是聊“你以为贵的是机票，其实更贵的是你不敢出发”。', createdAt: TODAY.toISOString(), type: '口播选题' },
+        { id: 'idea-seed-2', title: '为什么很多校招生努力却讲不出价值', body: '真实工作场景拆解：问题不是不会做，而是不会把价值翻译给别人听。', createdAt: TODAY.toISOString(), type: '观点内容' }
       ],
       diary: [
-        { id: 'diary-seed-1', title: '今日复盘', body: '真正要做的不是把每件事都做满，而是先把能形成飞轮的动作做出来。', createdAt: TODAY.toISOString(), mood: '稳住' }
+        { id: 'diary-seed-1', title: '章节旁白 · 今日记录', body: '这条副本不是一天爆发，而是把能滚起来的飞轮先转起来。', createdAt: TODAY.toISOString(), mood: '继续推进' }
       ],
-      metrics: {
-        followers: 286,
-        likes: 1240,
-        saves: 311,
-        revenue: 1680,
-        weeklyContent: [1, 0, 2, 1, 3, 2, 1]
-      },
       weekly: {
         weekStart: getWeekStart(TODAY).toISOString(),
         activeDays: [0],
         actions: [
-          { at: TODAY.toISOString(), source: 'seed', label: '初始化创作者营地' }
-        ],
-        rewardsClaimed: []
+          { id: uid('action'), at: TODAY.toISOString(), source: 'system', label: '副业成就系统已唤醒' }
+        ]
       },
-      lastCreativeAt: TODAY.toISOString()
+      unlockedTitles: [],
+      popupQueue: []
     };
 
+    function seedWithState(seeds) {
+      return seeds.map((stage, idx) => ({
+        ...stage,
+        unlocked: idx === 0,
+        tasks: stage.tasks.map(task => ({ ...task, checked: false, checkedAt: '' }))
+      }));
+    }
+    function structuredSeed() { return JSON.parse(JSON.stringify(defaultState)); }
+    function uid(prefix) { return prefix + '-' + Math.random().toString(36).slice(2, 9); }
+    function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+    function formatDate(value) {
+      const d = new Date(value);
+      return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
+    }
     function getWeekStart(date) {
       const d = new Date(date);
       const day = d.getDay();
@@ -368,141 +612,194 @@
       d.setDate(d.getDate() + diff);
       return d;
     }
-    function sameDate(a, b) {
-      return new Date(a).toDateString() === new Date(b).toDateString();
-    }
-    function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
-    function uid(prefix) { return prefix + '-' + Math.random().toString(36).slice(2, 9); }
-    function formatDate(value) {
-      const d = new Date(value);
-      return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
-    }
     function loadState() {
       try {
         const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) return structuredClone(defaultState);
-        const parsed = JSON.parse(raw);
-        return migrate(parsed);
+        if (!raw) return structuredSeed();
+        return migrate(JSON.parse(raw));
       } catch (e) {
-        return structuredClone(defaultState);
+        return structuredSeed();
       }
     }
     function migrate(parsed) {
-      const state = structuredClone(defaultState);
-      Object.assign(state, parsed || {});
-      state.attributes = Object.assign({}, defaultState.attributes, parsed.attributes || {});
-      state.metrics = Object.assign({}, defaultState.metrics, parsed.metrics || {});
-      state.weekly = Object.assign({}, defaultState.weekly, parsed.weekly || {});
-      if (!Array.isArray(state.weekly.activeDays)) state.weekly.activeDays = [];
-      if (!Array.isArray(state.weekly.actions)) state.weekly.actions = [];
-      if (!Array.isArray(state.weekly.rewardsClaimed)) state.weekly.rewardsClaimed = [];
-      if (!Array.isArray(state.ideas)) state.ideas = [];
-      if (!Array.isArray(state.diary)) state.diary = [];
-      if (!Array.isArray(state.tasks)) state.tasks = structuredClone(defaultState.tasks);
+      const base = structuredSeed();
+      const state = Object.assign(base, parsed || {});
+      state.attributes = Object.assign({}, base.attributes, parsed.attributes || {});
+      state.metrics = Object.assign({}, base.metrics, parsed.metrics || {});
+      state.consult = Object.assign({}, base.consult, parsed.consult || {});
+      if (!Array.isArray(state.consult.records)) state.consult.records = base.consult.records;
+      if (!Array.isArray(state.ideas)) state.ideas = base.ideas;
+      if (!Array.isArray(state.diary)) state.diary = base.diary;
+      if (!Array.isArray(state.unlockedTitles)) state.unlockedTitles = [];
+      if (!Array.isArray(state.popupQueue)) state.popupQueue = [];
+      if (!state.mainStages) state.mainStages = base.mainStages;
+      if (!state.consultStages) state.consultStages = base.consultStages;
       resetWeekIfNeeded(state);
+      syncUnlocks(state, false);
+      normalizeInfluence(state);
       return state;
     }
     function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
-    function resetWeekIfNeeded(stateObj) {
+    function resetWeekIfNeeded(s) {
       const currentWeekStart = getWeekStart(TODAY).toISOString();
-      if (stateObj.weekly.weekStart !== currentWeekStart) {
-        stateObj.weekly.weekStart = currentWeekStart;
-        stateObj.weekly.activeDays = [];
-        stateObj.weekly.actions = [];
-        stateObj.weekly.rewardsClaimed = [];
+      if (!s.weekly || s.weekly.weekStart !== currentWeekStart) {
+        s.weekly = {
+          weekStart: currentWeekStart,
+          activeDays: [],
+          actions: []
+        };
       }
+      if (!Array.isArray(s.weekly.activeDays)) s.weekly.activeDays = [];
+      if (!Array.isArray(s.weekly.actions)) s.weekly.actions = [];
     }
-    function applyWeeklyRewards(stateObj) {
-      const days = stateObj.weekly.activeDays.length;
-      const rewardMap = {
-        3: { creativity: 4, influence: 2 },
-        5: { monetization: 5, influence: 3 },
-        7: { creativity: 6, monetization: 6, influence: 4 }
-      };
-      [3,5,7].forEach(step => {
-        if (days >= step && !stateObj.weekly.rewardsClaimed.includes(step)) {
-          const reward = rewardMap[step];
-          stateObj.attributes.creativity += reward.creativity || 0;
-          stateObj.attributes.influence += reward.influence || 0;
-          stateObj.attributes.monetization += reward.monetization || 0;
-          stateObj.weekly.rewardsClaimed.push(step);
+    function totalTasks(s = state) {
+      return [...s.mainStages, ...s.consultStages].reduce((sum, stage) => sum + stage.tasks.length, 0);
+    }
+    function completedTaskCount(s = state) {
+      return [...s.mainStages, ...s.consultStages].reduce((sum, stage) => sum + stage.tasks.filter(t => t.checked).length, 0);
+    }
+    function completedMainCount(s = state) { return s.mainStages.reduce((sum, stage) => sum + stage.tasks.filter(t => t.checked).length, 0); }
+    function isStageComplete(stage) { return stage && stage.tasks.every(t => t.checked); }
+    function deriveStageUnlocks(stages) {
+      return stages.map((stage, index) => ({
+        ...stage,
+        unlocked: index === 0 ? true : stages[index - 1].tasks.every(t => t.checked)
+      }));
+    }
+    function getVisibleStages(stages) {
+      const derived = deriveStageUnlocks(stages);
+      const firstLockedIndex = derived.findIndex(item => !item.unlocked);
+      if (firstLockedIndex === -1) return derived;
+      return derived.filter((item, idx) => item.unlocked || idx === firstLockedIndex);
+    }
+    function currentMainStage(s = state) {
+      const derived = deriveStageUnlocks(s.mainStages);
+      return derived.find(stage => stage.unlocked && stage.tasks.some(t => !t.checked)) || derived[derived.length - 1];
+    }
+    function stagePercent(stage) {
+      return Math.round(stage.tasks.filter(t => t.checked).length / stage.tasks.length * 100);
+    }
+    function scorePoints(s = state) { return completedTaskCount(s) * 25; }
+    function rankByValue(value) {
+      if (value <= 30) return { label: '新星', next: 31 };
+      if (value <= 60) return { label: '升起', next: 61 };
+      if (value <= 100) return { label: '耀眼', next: 101 };
+      return { label: '封神', next: null };
+    }
+    function highestRankName(s = state) {
+      const values = [s.attributes.creativity, s.attributes.influence, s.attributes.monetization, s.attributes.aura];
+      const labels = values.map(v => rankByValue(v).label);
+      return labels.includes('封神') ? '封神' : labels.includes('耀眼') ? '耀眼' : labels.includes('升起') ? '升起' : '新星';
+    }
+    function getLevelInfo(s = state) {
+      const mainDone = completedMainCount(s);
+      if (mainDone >= 11) return { level: 4, name: '命运主宰' };
+      if (mainDone >= 7) return { level: 3, name: '破圈旅人' };
+      if (mainDone >= 3) return { level: 2, name: '轨迹建立者' };
+      return { level: 1, name: '内容新星' };
+    }
+    function currentUnlockedTitles(s = state) {
+      return titleLibrary.filter(item => s.unlockedTitles.includes(item.key));
+    }
+    function syncUnlocks(s, enqueue = true) {
+      titleLibrary.forEach(item => {
+        if (item.condition(s) && !s.unlockedTitles.includes(item.key)) {
+          s.unlockedTitles.push(item.key);
+          if (enqueue) {
+            s.popupQueue.push({
+              title: '称号解锁',
+              body: `恭喜探索者解锁称号「${item.name}」——${item.desc}`,
+              icon: '✨'
+            });
+          }
         }
       });
     }
-    function touchCreativeAction(source, label) {
+    function normalizeInfluence(s) {
+      s.attributes.influence = Math.max(8, s.attributes.influence || 8);
+      if (s.metrics.followers < 1000 && s.attributes.influence > 35) s.attributes.influence = 8;
+    }
+    function touchWeekly(source, label) {
       resetWeekIfNeeded(state);
       const weekStart = new Date(state.weekly.weekStart);
       const diff = Math.floor((new Date(TODAY).setHours(0,0,0,0) - weekStart.getTime()) / DAY_MS);
       const dayIndex = clamp(diff, 0, 6);
       if (!state.weekly.activeDays.includes(dayIndex)) state.weekly.activeDays.push(dayIndex);
-      state.weekly.actions.unshift({ at: TODAY.toISOString(), source, label });
+      state.weekly.actions.unshift({ id: uid('action'), at: TODAY.toISOString(), source, label });
       state.weekly.actions = state.weekly.actions.slice(0, 20);
-      state.lastCreativeAt = TODAY.toISOString();
-      applyWeeklyRewards(state);
     }
-    function completedTaskCount() {
-      return state.tasks.reduce((sum, stage) => sum + stage.tasks.filter(t => t.checked).length, 0);
+    function parseRewards(reward) {
+      const map = {
+        creativity: Number(reward.match(/创作力 \+(\d+)/)?.[1] || 0),
+        influence: Number(reward.match(/影响力 \+(\d+)/)?.[1] || 0),
+        monetization: Number(reward.match(/变现力 \+(\d+)/)?.[1] || 0),
+        aura: Number(reward.match(/气场值 \+(\d+)/)?.[1] || 0)
+      };
+      return map;
     }
-    function totalTaskCount() {
-      return state.tasks.reduce((sum, stage) => sum + stage.tasks.length, 0);
+    function applyReward(reward, direction = 1) {
+      const parsed = parseRewards(reward);
+      state.attributes.creativity = Math.max(35, state.attributes.creativity + parsed.creativity * direction);
+      state.attributes.influence = Math.max(8, state.attributes.influence + parsed.influence * direction);
+      state.attributes.monetization = Math.max(22, state.attributes.monetization + parsed.monetization * direction);
+      state.attributes.aura = Math.max(58, state.attributes.aura + parsed.aura * direction);
     }
-    function unlockedStages(stages) {
-      const derived = structuredClone(stages);
-      for (let i = 0; i < derived.length; i++) {
-        derived[i].unlocked = i === 0 ? true : derived[i - 1].tasks.every(t => t.checked);
+    function triggerParticles(target) {
+      if (!target) return;
+      const host = document.createElement('div');
+      host.className = 'particles';
+      target.appendChild(host);
+      const points = 16;
+      for (let i = 0; i < points; i++) {
+        const p = document.createElement('span');
+        p.className = 'particle';
+        const angle = (Math.PI * 2 / points) * i;
+        p.style.setProperty('--x', `${Math.cos(angle) * (40 + Math.random() * 40)}px`);
+        p.style.setProperty('--y', `${Math.sin(angle) * (40 + Math.random() * 40)}px`);
+        host.appendChild(p);
       }
-      return derived;
+      setTimeout(() => host.remove(), 800);
     }
-    function getVisibleStages(stages) {
-      const derived = unlockedStages(stages);
-      const firstLockedIndex = derived.findIndex(stage => !stage.unlocked);
-      if (firstLockedIndex === -1) return derived;
-      return derived.filter((stage, index) => stage.unlocked || index === firstLockedIndex);
+    function showPopup(payload) {
+      const overlay = document.getElementById('overlay');
+      const popup = document.getElementById('popup');
+      document.getElementById('popupTitle').textContent = payload.title;
+      document.getElementById('popupBody').textContent = payload.body;
+      popup.querySelector('.icon').textContent = payload.icon || '🏆';
+      overlay.classList.add('show');
+      popup.classList.add('show');
     }
-    function computeAura() {
-      const base = state.attributes.auraBase;
-      const creativeActions = state.weekly.actions.length;
-      const diaryCount = state.diary.length;
-      const ideaCount = state.ideas.length;
-      const done = completedTaskCount();
-      return Math.round(base + state.weekly.activeDays.length * 3 + creativeActions * 1.2 + diaryCount * 1.5 + ideaCount * 0.8 + done * 2);
+    function consumePopup() {
+      if (!state.popupQueue.length) return;
+      showPopup(state.popupQueue.shift());
+      saveState();
     }
-    function stageProgress(stage) {
-      const done = stage.tasks.filter(t => t.checked).length;
-      return Math.round(done / stage.tasks.length * 100);
+    function closePopup() {
+      document.getElementById('overlay').classList.remove('show');
+      document.getElementById('popup').classList.remove('show');
     }
-    function currentStage(stages) {
-      const derived = unlockedStages(stages);
-      return derived.find(stage => stage.unlocked && stage.tasks.some(t => !t.checked)) || derived[derived.length - 1];
-    }
-    function setTab(tab) { state.activeTab = tab; commit(); }
-    function commit() { saveState(); render(); }
-    function resetAll() {
-      localStorage.removeItem(STORAGE_KEY);
-      state = structuredClone(defaultState);
-      commit();
-    }
-
-    let state = loadState();
-
-    function handleTaskToggle(stageKey, taskId) {
-      const derived = unlockedStages(state.tasks);
-      const stageIndex = derived.findIndex(s => s.key === stageKey);
-      if (stageIndex === -1 || !derived[stageIndex].unlocked) return;
-      const stage = state.tasks[stageIndex];
+    function handleTaskToggle(group, stageKey, taskId, inputEl) {
+      const targetStages = group === 'main' ? state.mainStages : state.consultStages;
+      const visible = deriveStageUnlocks(targetStages);
+      const stageIndex = visible.findIndex(s => s.key === stageKey);
+      if (stageIndex < 0 || !visible[stageIndex].unlocked) return;
+      const stage = targetStages[stageIndex];
       const task = stage.tasks.find(t => t.id === taskId);
       task.checked = !task.checked;
       task.checkedAt = task.checked ? TODAY.toISOString() : '';
+      applyReward(task.reward, task.checked ? 1 : -1);
       if (task.checked) {
-        if (task.reward.includes('创造力')) state.attributes.creativity += Number(task.reward.match(/创造力 \+(\d+)/)?.[1] || 0);
-        if (task.reward.includes('影响力')) state.attributes.influence += Number(task.reward.match(/影响力 \+(\d+)/)?.[1] || 0);
-        if (task.reward.includes('变现力')) state.attributes.monetization += Number(task.reward.match(/变现力 \+(\d+)/)?.[1] || 0);
-        if (task.reward.includes('全属性提升')) {
-          state.attributes.creativity += 10; state.attributes.influence += 10; state.attributes.monetization += 10;
-        }
-        if (task.type === 'creative') touchCreativeAction('task', `完成任务：${task.text}`);
+        touchWeekly(group, `完成任务：${task.text}`);
+        if (inputEl) triggerParticles(inputEl.closest('.task-item'));
+        state.popupQueue.push({
+          title: '任务达成',
+          body: `恭喜探索者完成「${task.text}」——奖励已注入角色面板。`,
+          icon: '🌟'
+        });
       }
+      syncUnlocks(state, true);
       commit();
+      consumePopup();
     }
     function addIdea(form) {
       const title = form.querySelector('[name="ideaTitle"]').value.trim();
@@ -511,7 +808,7 @@
       if (!title || !body) return;
       state.ideas.unshift({ id: uid('idea'), title, body, type, createdAt: TODAY.toISOString() });
       state.attributes.creativity += 3;
-      touchCreativeAction('idea', `保存灵感：${title}`);
+      touchWeekly('idea', `保存灵感：${title}`);
       form.reset();
       commit();
     }
@@ -521,174 +818,343 @@
       const mood = form.querySelector('[name="diaryMood"]').value;
       if (!title || !body) return;
       state.diary.unshift({ id: uid('diary'), title, body, mood, createdAt: TODAY.toISOString() });
-      state.attributes.influence += 2;
-      touchCreativeAction('diary', `写下心得：${title}`);
+      state.attributes.aura += 2;
+      touchWeekly('diary', `写下旁白：${title}`);
       form.reset();
       commit();
     }
     function updateMetrics(form) {
       const followers = Number(form.querySelector('[name="followers"]').value || state.metrics.followers);
-      const likes = Number(form.querySelector('[name="likes"]').value || state.metrics.likes);
-      const saves = Number(form.querySelector('[name="saves"]').value || state.metrics.saves);
+      const likesAndSaves = Number(form.querySelector('[name="likesAndSaves"]').value || state.metrics.likesAndSaves);
       const revenue = Number(form.querySelector('[name="revenue"]').value || state.metrics.revenue);
       state.metrics.followers = followers;
-      state.metrics.likes = likes;
-      state.metrics.saves = saves;
+      state.metrics.likesAndSaves = likesAndSaves;
       state.metrics.revenue = revenue;
-      state.attributes.monetization = Math.max(state.attributes.monetization, 22 + Math.floor(revenue / 300));
-      state.attributes.influence = Math.max(state.attributes.influence, 8 + Math.floor((followers + likes) / 180));
-      touchCreativeAction('data', '更新数据看板');
+      state.attributes.influence = Math.max(8, 8 + Math.floor((followers - 671) / 80) + Math.floor(likesAndSaves / 120));
+      state.attributes.monetization = Math.max(state.attributes.monetization, 22 + Math.floor(revenue / 500));
+      touchWeekly('data', '更新内容数据看板');
       commit();
     }
-    function overviewHTML() {
-      const aura = computeAura();
-      const current = currentStage(state.tasks);
-      const weekStart = new Date(state.weekly.weekStart);
-      const weekDays = Array.from({ length: 7 }, (_, index) => {
-        const d = new Date(weekStart.getTime() + index * DAY_MS);
-        const active = state.weekly.activeDays.includes(index);
-        return `<div class="week-day ${active ? 'active' : ''}"><strong>${weekLabels[index]}</strong><div class="date">${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}</div><div class="dot"></div></div>`;
-      }).join('');
-      const rewardDone = step => state.weekly.rewardsClaimed.includes(step) ? 'done' : '';
-      const auraPercent = clamp(aura % 100, 8, 100);
+    function updateConsult(form) {
+      const monthlyTarget = Number(form.querySelector('[name="monthlyTarget"]').value || state.consult.monthlyTarget);
+      const orders = Number(form.querySelector('[name="orders"]').value || state.consult.orders);
+      const revenue = Number(form.querySelector('[name="consultRevenue"]').value || state.consult.revenue);
+      state.consult.monthlyTarget = monthlyTarget;
+      state.consult.orders = orders;
+      state.consult.revenue = revenue;
+      state.attributes.monetization = Math.max(state.attributes.monetization, 22 + orders * 4 + Math.floor(revenue / 500));
+      touchWeekly('consult', '更新秘密据点经营数据');
+      commit();
+    }
+    function addConsultRecord(form) {
+      const title = form.querySelector('[name="consultTitle"]').value.trim();
+      const body = form.querySelector('[name="consultBody"]').value.trim();
+      const type = form.querySelector('[name="consultType"]').value;
+      if (!title || !body) return;
+      state.consult.records.unshift({ id: uid('consult'), title, body, type, createdAt: TODAY.toISOString() });
+      state.attributes.monetization += 2;
+      state.attributes.aura += 1;
+      touchWeekly('consult', `秘密据点新增记录：${title}`);
+      form.reset();
+      commit();
+    }
+    function resetAll() {
+      localStorage.removeItem(STORAGE_KEY);
+      state = structuredSeed();
+      syncUnlocks(state, false);
+      commit();
+    }
+    let state = loadState();
+    syncUnlocks(state, false);
+
+    function mainOverviewHTML() {
+      const current = currentMainStage();
+      const level = getLevelInfo();
+      const titles = currentUnlockedTitles();
+      const currentTitle = titles[titles.length - 1]?.name || '未命名旅人';
+      const mainPercent = Math.round(completedMainCount() / state.mainStages.reduce((n, s) => n + s.tasks.length, 0) * 100);
       return `
         <div class="grid-2">
-          <section class="card">
-            <div class="section-title"><div><h2>角色属性总览</h2><div class="section-desc">初始值已按你的最新要求重置：创造力 35 / 影响力 8 / 变现力 22 / 气场 58。现在的<span class="accent">气场</span>改为由持续创作、任务推进与复盘沉淀共同抬升。</div></div></div>
-            <div class="attr-grid">
-              <div class="attr"><div class="attr-head"><div><div class="attr-name">创造力</div><div class="attr-value">${state.attributes.creativity}</div></div><span>✦</span></div><div class="progress"><i style="width:${clamp(state.attributes.creativity,0,100)}%"></i></div><div class="hint">每次保存灵感、完成创作任务、周记录达标都会增长。</div></div>
-              <div class="attr"><div class="attr-head"><div><div class="attr-name">影响力</div><div class="attr-value">${state.attributes.influence}</div></div><span>✦</span></div><div class="progress"><i style="width:${clamp(state.attributes.influence,0,100)}%"></i></div><div class="hint">来自观点表达、数据抬升和可被感知的个人判断。</div></div>
-              <div class="attr"><div class="attr-head"><div><div class="attr-name">变现力</div><div class="attr-value">${state.attributes.monetization}</div></div><span>✦</span></div><div class="progress"><i style="width:${clamp(state.attributes.monetization,0,100)}%"></i></div><div class="hint">产品页、咨询承接、收入记录都会拉高这项数值。</div></div>
-              <div class="attr"><div class="attr-head"><div><div class="attr-name">气场</div><div class="attr-value">${aura}</div></div><span>👑</span></div><div class="progress"><i style="width:${auraPercent}%"></i></div><div class="hint">气场 = 58 基础值 + 本周活跃天数 + 创作动作数 + 心得沉淀 + 阶段完成度，不再靠单一打卡硬堆。</div></div>
+          <section class="section glass">
+            <div class="attr-title-row">
+              <div>
+                <div class="small-label">角色属性面板</div>
+                <h2>甜一昂 · 长线成长属性</h2>
+              </div>
+              <div class="badge-pill">总属性值 ${state.attributes.creativity + state.attributes.influence + state.attributes.monetization + state.attributes.aura}</div>
             </div>
-            <div class="pill-row" style="margin-top:16px;">
-              <div class="pill">当前主线：${current.icon} ${current.title}</div>
-              <div class="pill">已完成任务：${completedTaskCount()} / ${totalTaskCount()}</div>
-              <div class="pill">本周创作活跃：${state.weekly.activeDays.length} / 7 天</div>
-            </div>
+            <div class="attr-grid">${attributeCardsHTML()}</div>
           </section>
-          <section class="panel">
-            <div class="section-title"><div><h2>本周创作记录</h2><div class="section-desc">现在按周统计，<span class="accent">每周一自动重置</span>。今天是 2026/05/25（周一），所以本周已经是全新周期。</div></div></div>
-            <div class="week-board">${weekDays}</div>
-            <div class="reward-list">
-              <div class="mini-card ${rewardDone(3)}"><strong>3 天达标</strong><div class="hint">创造力 +4，影响力 +2</div></div>
-              <div class="mini-card ${rewardDone(5)}"><strong>5 天达标</strong><div class="hint">变现力 +5，影响力 +3</div></div>
-              <div class="mini-card ${rewardDone(7)}"><strong>7 天达标</strong><div class="hint">创造力 +6，变现力 +6，影响力 +4</div></div>
+          <section class="section glass">
+            <div class="section-head">
+              <div>
+                <div class="small-label">章节推进度</div>
+                <h2>${current.icon} ${current.title}</h2>
+                <div class="section-desc">${current.narrative}</div>
+              </div>
+              <div class="badge-pill rank-badge">当前最高属性评级：${highestRankName()}</div>
             </div>
-            <div class="footer-note">任何创作动作都会计入本周记录：<span class="accent">保存灵感、写心得、勾选创作类任务、更新数据面板</span> 都算。</div>
+            <div class="progress-box">
+              <div class="progress-top"><span>当前章节完成度</span><strong>${stagePercent(current)}%</strong></div>
+              <div class="progress"><i style="--w:${stagePercent(current)}%"></i></div>
+            </div>
+            <div class="record-list">
+              <div class="record-card glass"><div class="small-label">当前等级</div><div style="margin-top:8px;font-size:28px;font-weight:800;color:var(--gold)">Lv.${level.level} ${level.name}</div><div class="footer-note">随着主线任务推进，会自动切换角色等级。</div></div>
+              <div class="record-card glass"><div class="small-label">已解锁称号</div><div style="margin-top:8px;font-size:22px;font-weight:800">${currentTitle}</div><div class="footer-note">目前已解锁 ${titles.length} 个称号，下一次推进也许就会点亮新的名字。</div></div>
+              <div class="record-card glass"><div class="small-label">主线热度</div><div style="margin-top:8px;font-size:22px;font-weight:800">${mainPercent}%</div><div class="footer-note">这代表内容创作主线的整体完成度，而不是一时的情绪波动。</div></div>
+            </div>
           </section>
         </div>
       `;
     }
+    function attributeCardsHTML() {
+      const rows = [
+        { key: 'creativity', name: '创作力', icon: '✍️', text: '发内容、写文案、策划选题时提升，决定输出密度和内容组织力。' },
+        { key: 'influence', name: '影响力', icon: '⭐', text: '获赞、转发、涨粉、破圈时提升，决定内容被看见与扩散的能力。' },
+        { key: 'monetization', name: '变现力', icon: '💰', text: '咨询成单、服务上架、接合作与知识付费产品化时提升。' },
+        { key: 'aura', name: '气场值', icon: '👑', text: '完成里程碑、解锁称号、持续推进长期主线时提升，代表稳定主心骨。' }
+      ];
+      return rows.map(item => {
+        const value = state.attributes[item.key];
+        const rank = rankByValue(value);
+        const gap = rank.next ? rank.next - value : 0;
+        return `
+          <article class="attr-card glass">
+            <div class="attr-top">
+              <div>
+                <div class="attr-icon">${item.icon}</div>
+                <div class="attr-name">${item.name}</div>
+              </div>
+              <div class="attr-value"><div class="num">${value}</div><div class="rank">${rank.label}</div></div>
+            </div>
+            <div class="attr-copy">${item.text}</div>
+            <div class="progress"><i style="--w:${clamp(value, 0, 100)}%"></i></div>
+            <div class="attr-bottom"><span>阶段门槛：0-30 新星 / 31-60 升起 / 61-100 耀眼 / 100+ 封神</span><span>${rank.next ? `距离下一评级还差 ${gap} 点` : '当前已是最高评级'}</span></div>
+          </article>
+        `;
+      }).join('');
+    }
     function tasksHTML() {
-      const visible = getVisibleStages(state.tasks);
-      return `<section class="panel"><div class="section-title"><div><h2>成就任务</h2><div class="section-desc">按你的要求，任务阶段现在采用渐进展示：<span class="accent">已解锁阶段全部可见 + 仅展示下一个未解锁阶段</span>，更远的阶段先隐藏，不制造额外压力。</div></div></div><div class="task-stage-wrap">${visible.map(stage => `
-        <article class="task-card ${stage.unlocked ? '' : 'locked'}">
-          <div class="task-header">
-            <div><h3>${stage.icon} ${stage.title}</h3><div class="meta">${stage.summary} · 进度 ${stage.tasks.filter(t => t.checked).length}/${stage.tasks.length} · ${stage.unlocked ? '已解锁' : '下一阶段预告'}</div></div>
-            <div class="badge">${stage.unlocked ? stageProgress(stage) + '%' : 'LOCKED'}</div>
+      const visible = getVisibleStages(state.mainStages);
+      return `
+        <section class="section glass">
+          <div class="section-head">
+            <div>
+              <div class="small-label">主线章节</div>
+              <h2>副本推进 · 内容主线</h2>
+              <div class="section-desc">V1 的章节逻辑已经还原：先启程，再积累，之后破圈，最后封神。咨询业务单独放进秘密据点，不再混在内容主线里。</div>
+            </div>
+            <div class="badge-pill">每完成 1 个任务 +25 成就积分</div>
           </div>
-          <div class="task-list">${stage.tasks.map(task => `
-            <label class="task-item ${task.checked ? 'done' : ''}">
-              <input type="checkbox" data-stage="${stage.key}" data-task="${task.id}" ${task.checked ? 'checked' : ''} ${stage.unlocked ? '' : 'disabled'} />
-              <div><strong>${task.text}</strong><span>${task.type === 'creative' ? '创作型任务：完成后自动计入本周创作记录。' : '系统型任务：更偏流程和变现建设。'}</span></div>
-              <div class="task-reward">${task.reward}</div>
-            </label>
+          <div class="stage-wrap">${visible.map(stage => `
+            <article class="stage-card glass ${stage.unlocked ? '' : 'locked'}">
+              <div class="stage-head">
+                <div>
+                  <h3>${stage.icon} ${stage.title}</h3>
+                  <div class="meta">${stage.narrative}</div>
+                </div>
+                <div class="stage-badge">${stage.unlocked ? `${stagePercent(stage)}%` : '下一章节预告'}</div>
+              </div>
+              <div class="progress"><i style="--w:${stage.unlocked ? stagePercent(stage) : 8}%"></i></div>
+              <div class="task-list">${stage.tasks.map(task => `
+                <label class="task-item ${task.checked ? 'done' : ''}">
+                  <input type="checkbox" data-group="main" data-stage="${stage.key}" data-task="${task.id}" ${task.checked ? 'checked' : ''} ${stage.unlocked ? '' : 'disabled'} />
+                  <div><strong>${task.text}</strong><span>${task.type === 'creative' ? 'NPC 提示：完成后会被记入创作轨迹，并为你的角色面板注入新的光。' : 'NPC 提示：这是里程碑级任务，完成时会直接改写角色的命运页。'}</span></div>
+                  <div class="task-reward">${task.reward}</div>
+                </label>
+              `).join('')}</div>
+            </article>
           `).join('')}</div>
-        </article>`).join('')}</div></section>`;
+        </section>
+      `;
     }
     function workshopHTML() {
       const ideas = state.ideas.map(item => `<div class="entry"><div class="top"><strong>${item.title}</strong><span class="type">${item.type}</span></div><p>${item.body}</p><div class="footer-note">记录时间：${formatDate(item.createdAt)}</div></div>`).join('');
       const diary = state.diary.map(item => `<div class="entry"><div class="top"><strong>${item.title}</strong><span class="type">${item.mood}</span></div><p>${item.body}</p><div class="footer-note">记录时间：${formatDate(item.createdAt)}</div></div>`).join('');
       return `
         <div class="grid-2">
-          <section class="panel">
-            <div class="section-title"><div><h2>Creator Workshop · 素材库</h2><div class="section-desc">任何灵感先落地，再慢慢打磨。保存这里会自动计入本周创作记录。</div></div></div>
+          <section class="section glass">
+            <div class="section-head"><div><div class="small-label">星途档案</div><h2>灵感仓</h2><div class="section-desc">把一闪而过的选题、句子、比喻先收进来。别让下一条好内容只存在脑海里三秒钟。</div></div></div>
             <form class="form" id="ideaForm">
-              <div class="row-2"><input name="ideaTitle" placeholder="这条灵感的标题" /><select name="ideaType"><option>观点素材</option><option>求职转化</option><option>留学内容</option><option>商业化脚本</option></select></div>
-              <textarea name="ideaBody" placeholder="写下这条内容的核心判断、故事线或口播方向"></textarea>
-              <div class="btn-row"><button class="action" type="submit">保存灵感</button></div>
+              <div class="row-2"><input name="ideaTitle" placeholder="这条灵感叫什么名字" /><select name="ideaType"><option>口播选题</option><option>观点内容</option><option>求职洞察</option><option>留学叙事</option></select></div>
+              <textarea name="ideaBody" placeholder="写下这个灵感最抓人的那一句，或者你想怎么讲它"></textarea>
+              <div class="btn-row"><button class="action" type="submit">收进灵感仓</button></div>
             </form>
-            <div class="entry-list">${ideas || '<div class="empty">还没有新增灵感，先把脑子里最想说的一句写下来。</div>'}</div>
+            <div class="entry-list">${ideas || '<div class="empty">灵感仓暂时还是空的，但真正的副本，往往从一句突然想说的话开始。</div>'}</div>
           </section>
-          <section class="panel">
-            <div class="section-title"><div><h2>心得本</h2><div class="section-desc">这里不是空泛鸡汤，而是让你把每次推进后的判断沉淀下来。</div></div></div>
+          <section class="section glass">
+            <div class="section-head"><div><div class="small-label">章节旁白</div><h2>长线记录本</h2><div class="section-desc">不是流水账，而是写给未来自己的章节旁白：这段路，你到底是怎么走过来的。</div></div></div>
             <form class="form" id="diaryForm">
-              <div class="row-2"><input name="diaryTitle" placeholder="今天这条复盘的标题" /><select name="diaryMood"><option>稳住</option><option>突破</option><option>复盘</option><option>提醒自己</option></select></div>
-              <textarea name="diaryBody" placeholder="今天做成了什么、卡住了什么、下一步最应该继续推什么"></textarea>
-              <div class="btn-row"><button class="action" type="submit">写入心得本</button></div>
+              <div class="row-2"><input name="diaryTitle" placeholder="今天这一章的标题" /><select name="diaryMood"><option>继续推进</option><option>小小突破</option><option>回炉重做</option><option>记住这天</option></select></div>
+              <textarea name="diaryBody" placeholder="今天成了什么、卡了什么、下一步最值得继续推什么"></textarea>
+              <div class="btn-row"><button class="action" type="submit">写入章节旁白</button></div>
             </form>
-            <div class="entry-list">${diary || '<div class="empty">还没有新的心得记录，今天哪怕只写 3 句话也算推进。</div>'}</div>
+            <div class="entry-list">${diary || '<div class="empty">还没有新的章节旁白。写三句话，也比什么都不留下更像在认真走主线。</div>'}</div>
           </section>
         </div>
       `;
     }
     function dataHTML() {
       const m = state.metrics;
-      const bars = m.weeklyContent.map((value, index) => `<div class="bar"><i style="height:${30 + value * 38}px"></i><span>${weekLabels[index]}</span></div>`).join('');
+      const bars = m.weeklyContent.map((value, index) => `<div class="bar"><i style="--h:${30 + value * 38}px"></i><span>${weekLabels[index]}</span></div>`).join('');
       return `
         <div class="grid-2">
-          <section class="panel">
-            <div class="section-title"><div><h2>数据面板</h2><div class="section-desc">给自己一个能看见增长的地方。每次更新数据，也算一次认真经营。</div></div></div>
+          <section class="section glass">
+            <div class="section-head"><div><div class="small-label">内容数据台</div><h2>星图回响</h2><div class="section-desc">这里记录的是你的小红书主线数据。女王现在是 671 粉，所以影响力初始值已被拉回低位，从 8 开始重新往上走。</div></div></div>
             <div class="metric-grid">
-              <div class="metric-card"><div class="label">粉丝数</div><div class="num">${m.followers}</div><div class="sub">影响力参考</div></div>
-              <div class="metric-card"><div class="label">点赞</div><div class="num">${m.likes}</div><div class="sub">内容反馈</div></div>
-              <div class="metric-card"><div class="label">收藏</div><div class="num">${m.saves}</div><div class="sub">转化意向</div></div>
-              <div class="metric-card"><div class="label">副业收入</div><div class="num">¥${m.revenue}</div><div class="sub">变现力参考</div></div>
+              <div class="metric-card glass"><div class="label">粉丝基础</div><div class="num">${m.followers}</div><div class="sub">对应影响力底盘</div></div>
+              <div class="metric-card glass"><div class="label">赞藏</div><div class="num">${m.likesAndSaves}</div><div class="sub">已合并为一个数据</div></div>
+              <div class="metric-card glass"><div class="label">当前等级</div><div class="num">Lv.${getLevelInfo().level}</div><div class="sub">${getLevelInfo().name}</div></div>
+              <div class="metric-card glass"><div class="label">副业积分</div><div class="num">${scorePoints()}</div><div class="sub">每完成 1 个任务 +25</div></div>
             </div>
             <div class="chart-box">${bars}</div>
-            <div class="footer-note">柱状图展示一周内容动作热度。现在是周一，所以本周记录从今天重新开始。</div>
+            <div class="footer-note">这张图记录本周内容动作热度。任何真实推进都会在这里留下痕迹。</div>
           </section>
-          <section class="panel">
-            <div class="section-title"><div><h2>手动更新最新数据</h2><div class="section-desc">如果你刷新了平台数据，直接在这里改。提交后会自动同步属性估算。</div></div></div>
+          <section class="section glass">
+            <div class="section-head"><div><div class="small-label">数据校准</div><h2>更新主线数值</h2><div class="section-desc">当平台后台有新变化，就在这里改。系统会重新估算影响力与变现力，不再把低粉账号误判成高影响力。</div></div></div>
             <form class="form" id="metricForm">
-              <div class="row-2"><input name="followers" type="number" min="0" value="${m.followers}" /><input name="likes" type="number" min="0" value="${m.likes}" /></div>
-              <div class="row-2"><input name="saves" type="number" min="0" value="${m.saves}" /><input name="revenue" type="number" min="0" value="${m.revenue}" /></div>
-              <div class="btn-row"><button class="action" type="submit">更新数据</button><button class="ghost" type="button" id="resetBtn">恢复初始样例</button></div>
+              <div class="row-2"><input name="followers" type="number" min="0" value="${m.followers}" /><input name="likesAndSaves" type="number" min="0" value="${m.likesAndSaves}" /></div>
+              <div class="row-2"><input name="revenue" type="number" min="0" value="${m.revenue}" /><input value="影响力初始值固定基线：8" disabled /></div>
+              <div class="btn-row"><button class="action" type="submit">同步主线数据</button><button class="ghost" type="button" id="resetBtn">恢复初始设定</button></div>
             </form>
-            <div class="entry-list">${state.weekly.actions.slice(0,6).map(item => `<div class="entry"><div class="top"><strong>${item.label}</strong><span class="type">${item.source}</span></div><div class="footer-note">${formatDate(item.at)}</div></div>`).join('') || '<div class="empty">这里会显示最近的创作动作。</div>'}</div>
+            <div class="entry-list">${state.weekly.actions.slice(0, 6).map(item => `<div class="entry"><div class="top"><strong>${item.label}</strong><span class="type">${item.source}</span></div><div class="footer-note">${formatDate(item.at)}</div></div>`).join('') || '<div class="empty">最近动作会显示在这里。</div>'}</div>
+          </section>
+        </div>
+      `;
+    }
+    function consultHTML() {
+      const visible = getVisibleStages(state.consultStages);
+      const records = state.consult.records.map(item => `<div class="entry"><div class="top"><strong>${item.title}</strong><span class="type">${item.type}</span></div><p>${item.body}</p><div class="footer-note">记录时间：${formatDate(item.createdAt)}</div></div>`).join('');
+      return `
+        <div class="grid-2">
+          <section class="section glass">
+            <div class="section-head"><div><div class="small-label">秘密据点</div><h2>咨询业务支线</h2><div class="section-desc">这条线专门负责留学/求职辅导接单，不再和内容创作主线混在一起。这里是服务体系、接单记录和月目标的阵地。</div></div></div>
+            <div class="stage-wrap">${visible.map(stage => `
+              <article class="consult-card glass ${stage.unlocked ? '' : 'locked'}">
+                <div class="stage-head"><div><h3>${stage.icon} ${stage.title}</h3><div class="meta">${stage.narrative}</div></div><div class="stage-badge">${stage.unlocked ? `${stagePercent(stage)}%` : '待解锁'}</div></div>
+                <div class="task-list">${stage.tasks.map(task => `
+                  <label class="task-item ${task.checked ? 'done' : ''}">
+                    <input type="checkbox" data-group="consult" data-stage="${stage.key}" data-task="${task.id}" ${task.checked ? 'checked' : ''} ${stage.unlocked ? '' : 'disabled'} />
+                    <div><strong>${task.text}</strong><span>据点提示：这些都是让服务真正可承接、可成交、可复用的关键动作。</span></div>
+                    <div class="task-reward">${task.reward}</div>
+                  </label>
+                `).join('')}</div>
+              </article>
+            `).join('')}</div>
+          </section>
+          <section class="section glass">
+            <div class="section-head"><div><div class="small-label">本月承接面板</div><h2>据点经营记录</h2><div class="section-desc">把接单数、月目标、收入记在这里。这样你的咨询线才是一条清晰的经营线，而不是散落在聊天框里的临时发挥。</div></div></div>
+            <div class="metric-grid">
+              <div class="metric-card glass"><div class="label">本月目标</div><div class="num">${state.consult.monthlyTarget}</div><div class="sub">计划承接单数</div></div>
+              <div class="metric-card glass"><div class="label">已接单数</div><div class="num">${state.consult.orders}</div><div class="sub">当前进度</div></div>
+              <div class="metric-card glass"><div class="label">咨询收入</div><div class="num">¥${state.consult.revenue}</div><div class="sub">独立于内容主线统计</div></div>
+              <div class="metric-card glass"><div class="label">案例记录</div><div class="num">${state.consult.records.length}</div><div class="sub">会越积越厚</div></div>
+            </div>
+            <form class="form" id="consultForm" style="margin-top:16px;">
+              <div class="row-2"><input name="monthlyTarget" type="number" min="0" value="${state.consult.monthlyTarget}" /><input name="orders" type="number" min="0" value="${state.consult.orders}" /></div>
+              <div class="row-2"><input name="consultRevenue" type="number" min="0" value="${state.consult.revenue}" /><input value="建议：服务文案、案例库、流程三件套优先补齐" disabled /></div>
+              <div class="btn-row"><button class="action" type="submit">更新据点数据</button></div>
+            </form>
+            <form class="form" id="consultRecordForm" style="margin-top:16px;">
+              <div class="row-2"><input name="consultTitle" placeholder="这条记录的标题" /><select name="consultType"><option>服务迭代</option><option>客户记录</option><option>案例沉淀</option><option>成交复盘</option></select></div>
+              <textarea name="consultBody" placeholder="写下这次接单、跟进、案例整理或服务优化的关键内容"></textarea>
+              <div class="btn-row"><button class="action" type="submit">写入据点档案</button></div>
+            </form>
+            <div class="entry-list">${records || '<div class="empty">据点档案还很新，但这正说明它值得现在开始认真搭。</div>'}</div>
           </section>
         </div>
       `;
     }
     function render() {
       const app = document.getElementById('app');
+      const level = getLevelInfo();
+      const current = currentMainStage();
+      const titles = currentUnlockedTitles();
+      const latestTitle = titles[titles.length - 1]?.name || '尚未解锁';
       const tabs = [
-        { key: 'overview', title: 'Overview', desc: '角色属性与本周创作记录' },
-        { key: 'tasks', title: 'Achievement Tasks', desc: '主线任务与渐进解锁' },
-        { key: 'workshop', title: 'Creator Workshop', desc: '素材库 + 心得本' },
-        { key: 'data', title: 'Data', desc: '内容数据与副业经营看板' }
+        { key: 'overview', title: '命运总览', desc: '角色卡、属性面板与章节推进' },
+        { key: 'tasks', title: '主线章节', desc: '内容创作主线副本' },
+        { key: 'workshop', title: '星途档案', desc: '灵感仓与章节旁白' },
+        { key: 'consult', title: '秘密据点', desc: '咨询业务支线与经营记录' },
+        { key: 'data', title: '星图回响', desc: '内容数据与成长反馈' }
       ];
       const active = state.activeTab;
       app.innerHTML = `
-        <header class="hero">
+        <header class="hero glass">
           <div class="hero-top">
             <div>
-              <div class="tag">Creator Camp · Ultimate Version</div>
-              <h1>甜一昂的创作者营地</h1>
-              <p class="subtitle">把“副业成就系统”升级成一个真正能长期陪你推进的 Creator Camp：上面看全局，下面拆任务，中间放素材和复盘，最后用数据收口。逻辑已经按照你最后一版要求重构成 4 个 Tab。</p>
-            </div>
-            <div class="hero-side">
-              <div class="attr-name">本周状态</div>
-              <div class="big">${state.weekly.activeDays.length}/7 天</div>
-              <div class="small">任意创作动作都会点亮本周记录。今天是本周第一天，正适合重新起势。</div>
+              <div class="title-block">
+                <div>
+                  <div class="english-tag">SIDE HUSTLE ROUTE</div>
+                  <h1 class="main-title">副业成就系统</h1>
+                  <p class="subtitle">这不是一个普通待办清单，而是一段正在被认真经历的光芒副本。你会在这里看见内容主线、咨询支线、角色等级、称号解锁、属性成长，以及每一次真实推进留下的回声。</p>
+                </div>
+                <div class="state-badge glass">
+                  <div class="line1">右上角角色状态</div>
+                  <div class="line2">Lv.${level.level} ${level.name}</div>
+                  <div class="line3">甜一昂（女王）<br/>当前最高属性评级：${highestRankName()}</div>
+                </div>
+              </div>
+              <div class="hero-panels">
+                <section class="role-card glass">
+                  <div class="role-avatar">👑</div>
+                  <div>
+                    <div class="small-label">玩家角色</div>
+                    <div class="role-name">甜一昂（女王）</div>
+                    <div class="level-line">
+                      <span class="level-pill">Lv.${level.level} ${level.name}</span>
+                      <span class="title-pill">已解锁称号：${latestTitle}</span>
+                    </div>
+                    <div class="role-desc">你正在经历的，不只是“把副业做起来”，而是一条从表达、影响力到变现能力逐步成型的长线光芒之路。每一次推进，都会让这个角色更完整一点。</div>
+                    <div class="mini-stats">
+                      <span class="badge-pill">创作力 ${state.attributes.creativity}</span>
+                      <span class="badge-pill">影响力 ${state.attributes.influence}</span>
+                      <span class="badge-pill">变现力 ${state.attributes.monetization}</span>
+                      <span class="badge-pill">气场值 ${state.attributes.aura}</span>
+                    </div>
+                  </div>
+                </section>
+                <section class="narration-card glass">
+                  <div>
+                    <div class="small-label">章节旁白</div>
+                    <p class="narration-text">这一章的名字，叫做“认真开始之后，命运也会给你回音”。内容主线负责把你的声音送出去，秘密据点负责把能力变成承接与成交。你不是在机械打卡，而是在一页页写出属于自己的传奇版本。</p>
+                  </div>
+                  <div class="footer-note">下一段剧情提示：先把最轻的起步任务做掉，副本的第一道门才会真正打开。</div>
+                </section>
+              </div>
+              <div class="info-grid">
+                <div class="info-card glass"><div class="k">总进度</div><div class="v">${completedTaskCount()} / ${totalTasks()}</div><div class="s">所有主线与支线任务合计</div></div>
+                <div class="info-card glass"><div class="k">当前主线</div><div class="v" style="font-size:24px">${current.icon} ${current.title}</div><div class="s">${current.narrative}</div></div>
+                <div class="info-card glass"><div class="k">成就积分</div><div class="v">${scorePoints()}</div><div class="s">每完成 1 个任务 +25 点</div></div>
+                <div class="info-card glass"><div class="k">已解锁称号</div><div class="v">${titles.length}</div><div class="s">最新称号：${latestTitle}</div></div>
+              </div>
+              <div class="chapter-track">
+                <section class="section glass">
+                  <div class="section-head"><div><div class="small-label">章节推进度</div><h2>${current.icon} ${current.title}</h2><div class="section-desc">${current.narrative}</div></div><div class="badge-pill">${stagePercent(current)}%</div></div>
+                  <div class="progress"><i style="--w:${stagePercent(current)}%"></i></div>
+                </section>
+                <section class="section glass">
+                  <div class="section-head"><div><div class="small-label">最高评级 badge</div><h2>当前最高属性评级：${highestRankName()}</h2><div class="section-desc">属性会随着任务、数据、咨询据点经营而波动提升。</div></div></div>
+                </section>
+              </div>
             </div>
           </div>
-          <div class="tabs">${tabs.map(tab => `<button class="tab-btn ${tab.key === active ? 'active' : ''}" data-tab="${tab.key}"><strong>${tab.title}</strong><span>${tab.desc}</span></button>`).join('')}</div>
+          <div class="tabs">${tabs.map(tab => `<button class="tab-btn glass ${tab.key === active ? 'active' : ''}" data-tab="${tab.key}"><strong>${tab.title}</strong><span>${tab.desc}</span></button>`).join('')}</div>
         </header>
         <main>
-          <section class="tab-panel ${active === 'overview' ? 'active' : ''}" id="panel-overview">${overviewHTML()}</section>
-          <section class="tab-panel ${active === 'tasks' ? 'active' : ''}" id="panel-tasks">${tasksHTML()}</section>
-          <section class="tab-panel ${active === 'workshop' ? 'active' : ''}" id="panel-workshop">${workshopHTML()}</section>
-          <section class="tab-panel ${active === 'data' ? 'active' : ''}" id="panel-data">${dataHTML()}</section>
+          <section class="tab-panel ${active === 'overview' ? 'active' : ''}">${mainOverviewHTML()}</section>
+          <section class="tab-panel ${active === 'tasks' ? 'active' : ''}">${tasksHTML()}</section>
+          <section class="tab-panel ${active === 'workshop' ? 'active' : ''}">${workshopHTML()}</section>
+          <section class="tab-panel ${active === 'consult' ? 'active' : ''}">${consultHTML()}</section>
+          <section class="tab-panel ${active === 'data' ? 'active' : ''}">${dataHTML()}</section>
         </main>
       `;
       bindEvents();
     }
     function bindEvents() {
-      document.querySelectorAll('[data-tab]').forEach(btn => btn.onclick = () => setTab(btn.dataset.tab));
+      document.querySelectorAll('[data-tab]').forEach(btn => btn.onclick = () => { state.activeTab = btn.dataset.tab; commit(false); });
       document.querySelectorAll('.task-item input[type="checkbox"]').forEach(input => {
-        input.onchange = () => handleTaskToggle(input.dataset.stage, input.dataset.task);
+        input.onchange = () => handleTaskToggle(input.dataset.group, input.dataset.stage, input.dataset.task, input);
       });
       const ideaForm = document.getElementById('ideaForm');
       if (ideaForm) ideaForm.onsubmit = e => { e.preventDefault(); addIdea(ideaForm); };
@@ -696,10 +1162,25 @@
       if (diaryForm) diaryForm.onsubmit = e => { e.preventDefault(); addDiary(diaryForm); };
       const metricForm = document.getElementById('metricForm');
       if (metricForm) metricForm.onsubmit = e => { e.preventDefault(); updateMetrics(metricForm); };
+      const consultForm = document.getElementById('consultForm');
+      if (consultForm) consultForm.onsubmit = e => { e.preventDefault(); updateConsult(consultForm); };
+      const consultRecordForm = document.getElementById('consultRecordForm');
+      if (consultRecordForm) consultRecordForm.onsubmit = e => { e.preventDefault(); addConsultRecord(consultRecordForm); };
       const resetBtn = document.getElementById('resetBtn');
       if (resetBtn) resetBtn.onclick = resetAll;
+      const popupBtn = document.getElementById('popupBtn');
+      const overlay = document.getElementById('overlay');
+      popupBtn.onclick = closePopup;
+      overlay.onclick = closePopup;
+    }
+    function commit(withPopup = true) {
+      syncUnlocks(state, false);
+      saveState();
+      render();
+      if (withPopup) consumePopup();
     }
     render();
+    consumePopup();
   </script>
 </body>
 </html>
